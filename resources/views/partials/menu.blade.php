@@ -202,6 +202,18 @@
                         </a>
                     </li>
                 @endcan
+                @can('meeting_note_access')
+                    <li class="nav-item">
+                        <a href="{{ route("admin.meeting-notes.index") }}" class="nav-link {{ request()->is("admin/meeting-notes") || request()->is("admin/meeting-notes/*") ? "active" : "" }}">
+                            <i class="fa-fw nav-icon far fa-sticky-note">
+
+                            </i>
+                            <p>
+                                {{ trans('cruds.meetingNote.title') }}
+                            </p>
+                        </a>
+                    </li>
+                @endcan
                 @if(file_exists(app_path('Http/Controllers/Auth/ChangePasswordController.php')))
                     @can('profile_password_edit')
                         <li class="nav-item">

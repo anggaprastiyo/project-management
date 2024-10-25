@@ -20,6 +20,8 @@ class UsersTableSeeder extends Seeder
                 'nik'               => '',
                 'job_position_code' => '',
                 'job_position_text' => '',
+                'unit_code'         => '',
+                'unit_name'         => '',
             ],
         ];
 

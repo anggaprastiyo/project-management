@@ -36,6 +36,11 @@ class Project extends Model implements HasMedia
         'scrum'  => 'Scrum',
     ];
 
+    public const TEAM_SELECT = [
+        'internal' => 'Internal',
+        'ad-hoc'   => 'Ad-Hoc',
+    ];
+
     public const STATUS_TYPE_SELECT = [
         'default' => 'Default',
         'custom'  => 'Custom',
@@ -43,6 +48,7 @@ class Project extends Model implements HasMedia
 
     protected $fillable = [
         'uuid',
+        'team',
         'name',
         'ticket_prefix',
         'project_owner_id',
@@ -74,6 +80,11 @@ class Project extends Model implements HasMedia
     public function projectTicketStatuses()
     {
         return $this->hasMany(TicketStatus::class, 'project_id', 'id');
+    }
+
+    public function projectMeetingNotes()
+    {
+        return $this->hasMany(MeetingNote::class, 'project_id', 'id');
     }
 
     public function getCoverImageAttribute()

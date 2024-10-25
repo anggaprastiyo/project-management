@@ -13,6 +13,8 @@ class CreateUsersTable extends Migration
             $table->string('uuid')->nullable();
             $table->string('nik')->nullable();
             $table->string('name')->nullable();
+            $table->string('unit_code')->nullable();
+            $table->string('unit_name')->nullable();
             $table->string('job_position_code')->nullable();
             $table->string('job_position_text')->nullable();
             $table->string('email')->nullable()->unique();
