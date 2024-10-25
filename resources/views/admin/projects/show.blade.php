@@ -25,6 +25,14 @@
                     </tr>
                     <tr>
                         <th>
+                            {{ trans('cruds.project.fields.team') }}
+                        </th>
+                        <td>
+                            {{ App\Models\Project::TEAM_SELECT[$project->team] ?? '' }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
                             {{ trans('cruds.project.fields.cover_image') }}
                         </th>
                         <td>
@@ -127,6 +135,11 @@
                 {{ trans('cruds.ticketStatus.title') }}
             </a>
         </li>
+        <li class="nav-item">
+            <a class="nav-link" href="#project_meeting_notes" role="tab" data-toggle="tab">
+                {{ trans('cruds.meetingNote.title') }}
+            </a>
+        </li>
     </ul>
     <div class="tab-content">
         <div class="tab-pane" role="tabpanel" id="project_tickets">
@@ -134,6 +147,9 @@
         </div>
         <div class="tab-pane" role="tabpanel" id="project_ticket_statuses">
             @includeIf('admin.projects.relationships.projectTicketStatuses', ['ticketStatuses' => $project->projectTicketStatuses])
+        </div>
+        <div class="tab-pane" role="tabpanel" id="project_meeting_notes">
+            @includeIf('admin.projects.relationships.projectMeetingNotes', ['meetingNotes' => $project->projectMeetingNotes])
         </div>
     </div>
 </div>

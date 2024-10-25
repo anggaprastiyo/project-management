@@ -20,6 +20,73 @@
                             <h3>{!! $chart1->options['chart_title'] !!}</h3>
                             {!! $chart1->renderHtml() !!}
                         </div>
+                        {{-- Widget - latest entries --}}
+                        <div class="{{ $settings2['column_class'] }}" style="overflow-x: auto;">
+                            <h3>{{ $settings2['chart_title'] }}</h3>
+                            <table class="table table-bordered table-striped">
+                                <thead>
+                                    <tr>
+                                        @foreach($settings2['fields'] as $key => $value)
+                                            <th>
+                                                {{ trans(sprintf('cruds.%s.fields.%s', $settings2['translation_key'] ?? 'pleaseUpdateWidget', $key)) }}
+                                            </th>
+                                        @endforeach
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @forelse($settings2['data'] as $entry)
+                                        <tr>
+                                            @foreach($settings2['fields'] as $key => $value)
+                                                <td>
+                                                    @if($value === '')
+                                                        {{ $entry->{$key} }}
+                                                    @elseif(is_iterable($entry->{$key}))
+                                                        @foreach($entry->{$key} as $subEentry)
+                                                            <span class="label label-info">{{ $subEentry->{$value} }}</span>
+                                                        @endforeach
+                                                    @else
+                                                        {{ data_get($entry, $key . '.' . $value) }}
+                                                    @endif
+                                                </td>
+                                            @endforeach
+                                        </tr>
+                                        @empty
+                                        <tr>
+                                            <td colspan="{{ count($settings2['fields']) }}">{{ __('No entries found') }}</td>
+                                        </tr>
+                                    @endforelse
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div class="{{ $settings3['column_class'] }}">
+                            <div class="info-box">
+                                <span class="info-box-icon bg-red" style="display:flex; flex-direction: column; justify-content: center;">
+                                    <i class="fa fa-chart-line"></i>
+                                </span>
+
+                                <div class="info-box-content">
+                                    <span class="info-box-text">{{ $settings3['chart_title'] }}</span>
+                                    <span class="info-box-number">{{ number_format($settings3['total_number']) }}</span>
+                                </div>
+                                <!-- /.info-box-content -->
+                            </div>
+                            <!-- /.info-box -->
+                        </div>
+                        <div class="{{ $settings4['column_class'] }}">
+                            <div class="info-box">
+                                <span class="info-box-icon bg-red" style="display:flex; flex-direction: column; justify-content: center;">
+                                    <i class="fa fa-chart-line"></i>
+                                </span>
+
+                                <div class="info-box-content">
+                                    <span class="info-box-text">{{ $settings4['chart_title'] }}</span>
+                                    <span class="info-box-number">{{ number_format($settings4['total_number']) }}</span>
+                                </div>
+                                <!-- /.info-box-content -->
+                            </div>
+                            <!-- /.info-box -->
+                        </div>
                     </div>
                 </div>
             </div>

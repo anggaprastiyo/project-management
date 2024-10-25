@@ -11,6 +11,19 @@
             @method('PUT')
             @csrf
             <div class="form-group">
+                <label>{{ trans('cruds.project.fields.team') }}</label>
+                <select class="form-control {{ $errors->has('team') ? 'is-invalid' : '' }}" name="team" id="team">
+                    <option value disabled {{ old('team', null) === null ? 'selected' : '' }}>{{ trans('global.pleaseSelect') }}</option>
+                    @foreach(App\Models\Project::TEAM_SELECT as $key => $label)
+                        <option value="{{ $key }}" {{ old('team', $project->team) === (string) $key ? 'selected' : '' }}>{{ $label }}</option>
+                    @endforeach
+                </select>
+                @if($errors->has('team'))
+                    <span class="text-danger">{{ $errors->first('team') }}</span>
+                @endif
+                <span class="help-block">{{ trans('cruds.project.fields.team_helper') }}</span>
+            </div>
+            <div class="form-group">
                 <label for="cover_image">{{ trans('cruds.project.fields.cover_image') }}</label>
                 <div class="needsclick dropzone {{ $errors->has('cover_image') ? 'is-invalid' : '' }}" id="cover_image-dropzone">
                 </div>

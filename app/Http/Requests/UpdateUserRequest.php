@@ -33,6 +33,14 @@ class UpdateUserRequest extends FormRequest
                 'string',
                 'required',
             ],
+            'unit_code' => [
+                'string',
+                'nullable',
+            ],
+            'unit_name' => [
+                'string',
+                'nullable',
+            ],
             'job_position_code' => [
                 'string',
                 'min:1',
