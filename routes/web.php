@@ -62,6 +62,12 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::post('comments/ckmedia', 'CommentController@storeCKEditorImages')->name('comments.storeCKEditorImages');
     Route::resource('comments', 'CommentController');
 
+    // Meeting Notes
+    Route::delete('meeting-notes/destroy', 'MeetingNotesController@massDestroy')->name('meeting-notes.massDestroy');
+    Route::post('meeting-notes/media', 'MeetingNotesController@storeMedia')->name('meeting-notes.storeMedia');
+    Route::post('meeting-notes/ckmedia', 'MeetingNotesController@storeCKEditorImages')->name('meeting-notes.storeCKEditorImages');
+    Route::resource('meeting-notes', 'MeetingNotesController');
+
     Route::get('global-search', 'GlobalSearchController@search')->name('globalSearch');
 });
 Route::group(['prefix' => 'profile', 'as' => 'profile.', 'namespace' => 'Auth', 'middleware' => ['auth']], function () {

@@ -35,6 +35,12 @@
                             {{ trans('cruds.user.fields.name') }}
                         </th>
                         <th>
+                            {{ trans('cruds.user.fields.unit_code') }}
+                        </th>
+                        <th>
+                            {{ trans('cruds.user.fields.unit_name') }}
+                        </th>
+                        <th>
                             {{ trans('cruds.user.fields.job_position_code') }}
                         </th>
                         <th>
@@ -55,6 +61,12 @@
                     </tr>
                     <tr>
                         <td>
+                        </td>
+                        <td>
+                            <input class="search" type="text" placeholder="{{ trans('global.search') }}">
+                        </td>
+                        <td>
+                            <input class="search" type="text" placeholder="{{ trans('global.search') }}">
                         </td>
                         <td>
                             <input class="search" type="text" placeholder="{{ trans('global.search') }}">
@@ -109,6 +121,12 @@
                             </td>
                             <td>
                                 {{ $user->name ?? '' }}
+                            </td>
+                            <td>
+                                {{ $user->unit_code ?? '' }}
+                            </td>
+                            <td>
+                                {{ $user->unit_name ?? '' }}
                             </td>
                             <td>
                                 {{ $user->job_position_code ?? '' }}

@@ -49,6 +49,22 @@
                     </tr>
                     <tr>
                         <th>
+                            {{ trans('cruds.user.fields.unit_code') }}
+                        </th>
+                        <td>
+                            {{ $user->unit_code }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            {{ trans('cruds.user.fields.unit_name') }}
+                        </th>
+                        <td>
+                            {{ $user->unit_name }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
                             {{ trans('cruds.user.fields.job_position_code') }}
                         </th>
                         <td>
