@@ -10,6 +10,7 @@ use App\Models\Role;
 use App\Models\User;
 use Gate;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\Response;
 
 class UsersController extends Controller
@@ -18,11 +19,11 @@ class UsersController extends Controller
     {
         abort_if(Gate::denies('user_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
+        $userLogin = Auth::user();
         $users = User::with(['roles'])->get();
-
         $roles = Role::get();
 
-        return view('admin.users.index', compact('roles', 'users'));
+        return view('admin.users.index', compact('roles', 'users', 'userLogin'));
     }
 
     public function create()

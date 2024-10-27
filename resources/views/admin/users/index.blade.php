@@ -99,25 +99,29 @@
               </td>
               <td>
                 <div class="btn-group">
-                @can('user_show')
-                  <a class="btn btn-xs btn-primary" href="{{ route('admin.users.show', $user->id) }}">
-                    <i class="fas fa-fw fa-eye"></i>
-                  </a>
-                @endcan
+                  @can('user_show')
+                    <a class="btn btn-xs btn-primary" href="{{ route('admin.users.show', $user->id) }}">
+                      <i class="fas fa-fw fa-eye"></i>
+                    </a>
+                  @endcan
 
-                @can('user_edit')
-                  <a class="btn btn-xs btn-info" href="{{ route('admin.users.edit', $user->id) }}">
-                    <i class="fas fa-fw fa-edit"></i>
-                  </a>
-                @endcan
+                  @can('user_edit')
+                    <a class="btn btn-xs btn-info" href="{{ route('admin.users.edit', $user->id) }}">
+                      <i class="fas fa-fw fa-edit"></i>
+                    </a>
+                  @endcan
 
-                @can('user_delete')
-                  <form action="{{ route('admin.users.destroy', $user->id) }}" method="POST" onsubmit="return confirm('{{ trans('global.areYouSure') }}');" style="display: inline-block;">
-                    <input type="hidden" name="_method" value="DELETE">
-                    <input type="hidden" name="_token" value="{{ csrf_token() }}">
-                    <button class="btn btn-xs btn-danger" type="submit"><i class="fas fa-fw fa-trash"></i></button>
-                  </form>
-                @endcan
+                  @can('user_delete')
+                    @if ($userLogin->id != $user->id)
+                      <form action="{{ route('admin.users.destroy', $user->id) }}" method="POST"
+                            onsubmit="return confirm('{{ trans('global.areYouSure') }}');"
+                            style="display: inline-block;">
+                        <input type="hidden" name="_method" value="DELETE">
+                        <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                        <button class="btn btn-xs btn-danger" type="submit"><i class="fas fa-fw fa-trash"></i></button>
+                      </form>
+                    @endif
+                  @endcan
                 </div>
               </td>
               <td>
@@ -198,7 +202,7 @@
 
         $.extend(true, $.fn.dataTable.defaults, {
             orderCellsTop: true,
-            order: [[1, 'desc']],
+            order: [[2, 'desc']],
             pageLength: 100,
         });
 
