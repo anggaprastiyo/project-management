@@ -11,14 +11,6 @@
             @method('PUT')
             @csrf
             <div class="form-group">
-                <label for="uuid">{{ trans('cruds.user.fields.uuid') }}</label>
-                <input class="form-control {{ $errors->has('uuid') ? 'is-invalid' : '' }}" type="text" name="uuid" id="uuid" value="{{ old('uuid', $user->uuid) }}">
-                @if($errors->has('uuid'))
-                    <span class="text-danger">{{ $errors->first('uuid') }}</span>
-                @endif
-                <span class="help-block">{{ trans('cruds.user.fields.uuid_helper') }}</span>
-            </div>
-            <div class="form-group">
                 <label for="nik">{{ trans('cruds.user.fields.nik') }}</label>
                 <input class="form-control {{ $errors->has('nik') ? 'is-invalid' : '' }}" type="text" name="nik" id="nik" value="{{ old('nik', $user->nik) }}">
                 @if($errors->has('nik'))
