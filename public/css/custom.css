@@ -65,6 +65,7 @@ table.dataTable thead .sorting_desc {
 }
 .searchable-fields {
     padding-left:5px;
+    background-color: #00a65a;
 }
 .searchable-link {
     padding:0 5px 0 5px;
@@ -102,4 +103,44 @@ div.dt-button-collection {
 .buttons-columnVisibility.active {
     background-color: rgba(128, 128, 128, 0.1);
     font-weight: bolder;
+}
+
+.sidebar-light-info .nav-sidebar>.nav-item>.nav-treeview {
+    background-color: #E9F2FF;
+    border-radius: 5px;
+}
+
+.sidebar-light-info .nav-sidebar>.nav-item>.nav-link.active {
+    background-color: #CCE0FF;
+    color: #5396F5;
+    box-shadow: none;
+}
+
+.sidebar-light-info .nav-treeview>.nav-item>.nav-link.active {
+    background-color: #E9F2FF;
+    border: 2px solid #007BFF;
+    color: #5396F5;
+}
+
+.nav-sidebar>.nav-item .nav-icon {
+    text-align: center;
+    width: 1.4rem;
+    font-size: 1rem;
+    margin-right: .1rem;
+}
+
+.content-wrapper>.content {
+    padding: 2rem;
+}
+
+.dt-buttons .btn {
+    border-radius: 5px;
+}
+
+.brand-link {
+    text-align: center;
+}
+
+.brand-text {
+    color: #007BFF;
 }
