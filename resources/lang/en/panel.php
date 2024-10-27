@@ -1,6 +1,6 @@
 <?php
 
 return [
-    'site_title' => 'Taspen Project',
+    'site_title' => 'Project Management',
 
 ];

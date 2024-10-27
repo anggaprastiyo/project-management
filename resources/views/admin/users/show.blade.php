@@ -25,14 +25,6 @@
                     </tr>
                     <tr>
                         <th>
-                            {{ trans('cruds.user.fields.uuid') }}
-                        </th>
-                        <td>
-                            {{ $user->uuid }}
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>
                             {{ trans('cruds.user.fields.nik') }}
                         </th>
                         <td>
