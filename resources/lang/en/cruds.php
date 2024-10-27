@@ -73,7 +73,7 @@ return [
             'nik_helper'               => ' ',
             'job_position_code'        => 'Job Position Code',
             'job_position_code_helper' => ' ',
-            'job_position_text'        => 'Job Position Text',
+            'job_position_text'        => 'Job Position',
             'job_position_text_helper' => ' ',
             'unit_code'                => 'Unit Code',
             'unit_code_helper'         => ' ',
