@@ -3,8 +3,8 @@
 @can('ticket_status_create')
     <div style="margin-bottom: 10px;" class="row">
         <div class="col-lg-12">
-            <a class="btn btn-success" href="{{ route('admin.ticket-statuses.create') }}">
-                {{ trans('global.add') }} {{ trans('cruds.ticketStatus.title_singular') }}
+            <a class="btn btn-primary" href="{{ route('admin.ticket-statuses.create') }}">
+                <i class="fa-fw nav-icon fas fa-plus"></i> {{ trans('global.add') }} {{ trans('cruds.ticketStatus.title_singular') }}
             </a>
         </div>
     </div>
@@ -119,7 +119,7 @@
   let deleteButton = {
     text: deleteButtonTrans,
     url: "{{ route('admin.ticket-statuses.massDestroy') }}",
-    className: 'btn-danger',
+    className: 'btn-danger btn-xs',
     action: function (e, dt, node, config) {
       var ids = $.map(dt.rows({ selected: true }).nodes(), function (entry) {
           return $(entry).data('entry-id')
