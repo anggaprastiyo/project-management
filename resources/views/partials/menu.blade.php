@@ -89,8 +89,8 @@
                     </li>
                 @endcan
                 @can('management_access')
-                    <li class="nav-item has-treeview {{ request()->is("admin/projects*") ? "menu-open" : "" }} {{ request()->is("admin/tickets*") ? "menu-open" : "" }}">
-                        <a class="nav-link nav-dropdown-toggle {{ request()->is("admin/projects*") ? "active" : "" }} {{ request()->is("admin/tickets*") ? "active" : "" }}" href="#">
+                    <li class="nav-item has-treeview {{ request()->is("admin/projects*") ? "menu-open" : "" }} {{ request()->is("admin/tickets*") ? "menu-open" : "" }} {{ request()->is("admin/boards*") ? "menu-open" : "" }} {{ request()->is("admin/road-maps*") ? "menu-open" : "" }}">
+                        <a class="nav-link nav-dropdown-toggle {{ request()->is("admin/projects*") ? "active" : "" }} {{ request()->is("admin/tickets*") ? "active" : "" }} {{ request()->is("admin/boards*") ? "active" : "" }} {{ request()->is("admin/road-maps*") ? "active" : "" }}" href="#">
                             <i class="fa-fw nav-icon fas fa-minus-square">
 
                             </i>
@@ -120,6 +120,30 @@
                                         </i>
                                         <p>
                                             {{ trans('cruds.ticket.title') }}
+                                        </p>
+                                    </a>
+                                </li>
+                            @endcan
+                            @can('board_access')
+                                <li class="nav-item">
+                                    <a href="{{ route("admin.boards.index") }}" class="nav-link {{ request()->is("admin/boards") || request()->is("admin/boards/*") ? "active" : "" }}">
+                                        <i class="fa-fw nav-icon far fa-map">
+
+                                        </i>
+                                        <p>
+                                            {{ trans('cruds.board.title') }}
+                                        </p>
+                                    </a>
+                                </li>
+                            @endcan
+                            @can('road_map_access')
+                                <li class="nav-item">
+                                    <a href="{{ route("admin.road-maps.index") }}" class="nav-link {{ request()->is("admin/road-maps") || request()->is("admin/road-maps/*") ? "active" : "" }}">
+                                        <i class="fa-fw nav-icon far fa-calendar-alt">
+
+                                        </i>
+                                        <p>
+                                            {{ trans('cruds.roadMap.title') }}
                                         </p>
                                     </a>
                                 </li>
@@ -198,6 +222,18 @@
                             </i>
                             <p>
                                 {{ trans('cruds.comment.title') }}
+                            </p>
+                        </a>
+                    </li>
+                @endcan
+                @can('meeting_note_access')
+                    <li class="nav-item">
+                        <a href="{{ route("admin.meeting-notes.index") }}" class="nav-link {{ request()->is("admin/meeting-notes") || request()->is("admin/meeting-notes/*") ? "active" : "" }}">
+                            <i class="fa-fw nav-icon far fa-sticky-note">
+
+                            </i>
+                            <p>
+                                {{ trans('cruds.meetingNote.title') }}
                             </p>
                         </a>
                     </li>

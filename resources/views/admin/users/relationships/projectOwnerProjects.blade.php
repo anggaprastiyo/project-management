@@ -25,6 +25,9 @@
                                 {{ trans('cruds.project.fields.id') }}
                             </th>
                             <th>
+                                {{ trans('cruds.project.fields.team') }}
+                            </th>
+                            <th>
                                 {{ trans('cruds.project.fields.cover_image') }}
                             </th>
                             <th>
@@ -55,6 +58,9 @@
                                 </td>
                                 <td>
                                     {{ $project->id ?? '' }}
+                                </td>
+                                <td>
+                                    {{ App\Models\Project::TEAM_SELECT[$project->team] ?? '' }}
                                 </td>
                                 <td>
                                     @if($project->cover_image)

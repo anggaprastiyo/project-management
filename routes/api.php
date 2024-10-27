@@ -27,4 +27,8 @@ Route::group(['prefix' => 'v1', 'as' => 'api.', 'namespace' => 'Api\V1\Admin', '
     // Comment
     Route::post('comments/media', 'CommentApiController@storeMedia')->name('comments.storeMedia');
     Route::apiResource('comments', 'CommentApiController');
+
+    // Meeting Notes
+    Route::post('meeting-notes/media', 'MeetingNotesApiController@storeMedia')->name('meeting-notes.storeMedia');
+    Route::apiResource('meeting-notes', 'MeetingNotesApiController');
 });

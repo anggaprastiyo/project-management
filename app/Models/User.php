@@ -34,6 +34,8 @@ class User extends Authenticatable
         'uuid',
         'nik',
         'name',
+        'unit_code',
+        'unit_name',
         'job_position_code',
         'job_position_text',
         'email',
