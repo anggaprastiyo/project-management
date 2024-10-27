@@ -35,22 +35,13 @@
                             {{ trans('cruds.user.fields.name') }}
                         </th>
                         <th>
-                            {{ trans('cruds.user.fields.unit_code') }}
-                        </th>
-                        <th>
                             {{ trans('cruds.user.fields.unit_name') }}
-                        </th>
-                        <th>
-                            {{ trans('cruds.user.fields.job_position_code') }}
                         </th>
                         <th>
                             {{ trans('cruds.user.fields.job_position_text') }}
                         </th>
                         <th>
                             {{ trans('cruds.user.fields.email') }}
-                        </th>
-                        <th>
-                            {{ trans('cruds.user.fields.email_verified_at') }}
                         </th>
                         <th>
                             {{ trans('cruds.user.fields.roles') }}
@@ -61,15 +52,6 @@
                     </tr>
                     <tr>
                         <td>
-                        </td>
-                        <td>
-                            <input class="search" type="text" placeholder="{{ trans('global.search') }}">
-                        </td>
-                        <td>
-                            <input class="search" type="text" placeholder="{{ trans('global.search') }}">
-                        </td>
-                        <td>
-                            <input class="search" type="text" placeholder="{{ trans('global.search') }}">
                         </td>
                         <td>
                             <input class="search" type="text" placeholder="{{ trans('global.search') }}">
@@ -123,22 +105,13 @@
                                 {{ $user->name ?? '' }}
                             </td>
                             <td>
-                                {{ $user->unit_code ?? '' }}
-                            </td>
-                            <td>
                                 {{ $user->unit_name ?? '' }}
-                            </td>
-                            <td>
-                                {{ $user->job_position_code ?? '' }}
                             </td>
                             <td>
                                 {{ $user->job_position_text ?? '' }}
                             </td>
                             <td>
                                 {{ $user->email ?? '' }}
-                            </td>
-                            <td>
-                                {{ $user->email_verified_at ?? '' }}
                             </td>
                             <td>
                                 @foreach($user->roles as $key => $item)
