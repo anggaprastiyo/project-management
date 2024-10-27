@@ -26,9 +26,6 @@
                             {{ trans('cruds.user.fields.id') }}
                         </th>
                         <th>
-                            {{ trans('cruds.user.fields.uuid') }}
-                        </th>
-                        <th>
                             {{ trans('cruds.user.fields.nik') }}
                         </th>
                         <th>
@@ -72,9 +69,6 @@
                             <input class="search" type="text" placeholder="{{ trans('global.search') }}">
                         </td>
                         <td>
-                            <input class="search" type="text" placeholder="{{ trans('global.search') }}">
-                        </td>
-                        <td>
                             <select class="search">
                                 <option value>{{ trans('global.all') }}</option>
                                 @foreach($roles as $key => $item)
@@ -94,9 +88,6 @@
                             </td>
                             <td>
                                 {{ $user->id ?? '' }}
-                            </td>
-                            <td>
-                                {{ $user->uuid ?? '' }}
                             </td>
                             <td>
                                 {{ $user->nik ?? '' }}
@@ -197,7 +188,7 @@
       $($.fn.dataTable.tables(true)).DataTable()
           .columns.adjust();
   });
-
+  
 let visibleColumnsIndexes = null;
 $('.datatable thead').on('input', '.search', function () {
       let strict = $(this).attr('strict') || false

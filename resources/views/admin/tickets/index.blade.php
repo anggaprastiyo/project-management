@@ -35,13 +35,7 @@
                             {{ trans('cruds.ticket.fields.name') }}
                         </th>
                         <th>
-                            {{ trans('cruds.ticket.fields.reporter') }}
-                        </th>
-                        <th>
                             {{ trans('cruds.ticket.fields.assigne') }}
-                        </th>
-                        <th>
-                            {{ trans('cruds.ticket.fields.label') }}
                         </th>
                         <th>
                             {{ trans('cruds.ticket.fields.status') }}
@@ -51,15 +45,6 @@
                         </th>
                         <th>
                             {{ trans('cruds.ticket.fields.priority') }}
-                        </th>
-                        <th>
-                            {{ trans('cruds.ticket.fields.point') }}
-                        </th>
-                        <th>
-                            {{ trans('cruds.ticket.fields.design_link') }}
-                        </th>
-                        <th>
-                            {{ trans('cruds.ticket.fields.related_ticket') }}
                         </th>
                         <th>
                             &nbsp;
@@ -96,17 +81,6 @@
                         <td>
                             <select class="search">
                                 <option value>{{ trans('global.all') }}</option>
-                                @foreach($users as $key => $item)
-                                    <option value="{{ $item->name }}">{{ $item->name }}</option>
-                                @endforeach
-                            </select>
-                        </td>
-                        <td>
-                            <input class="search" type="text" placeholder="{{ trans('global.search') }}">
-                        </td>
-                        <td>
-                            <select class="search">
-                                <option value>{{ trans('global.all') }}</option>
                                 @foreach($ticket_statuses as $key => $item)
                                     <option value="{{ $item->name }}">{{ $item->name }}</option>
                                 @endforeach
@@ -124,20 +98,6 @@
                             <select class="search">
                                 <option value>{{ trans('global.all') }}</option>
                                 @foreach($ticket_priorities as $key => $item)
-                                    <option value="{{ $item->name }}">{{ $item->name }}</option>
-                                @endforeach
-                            </select>
-                        </td>
-                        <td>
-                            <input class="search" type="text" placeholder="{{ trans('global.search') }}">
-                        </td>
-                        <td>
-                            <input class="search" type="text" placeholder="{{ trans('global.search') }}">
-                        </td>
-                        <td>
-                            <select class="search">
-                                <option value>{{ trans('global.all') }}</option>
-                                @foreach($tickets as $key => $item)
                                     <option value="{{ $item->name }}">{{ $item->name }}</option>
                                 @endforeach
                             </select>
@@ -165,13 +125,7 @@
                                 {{ $ticket->name ?? '' }}
                             </td>
                             <td>
-                                {{ $ticket->reporter->name ?? '' }}
-                            </td>
-                            <td>
                                 {{ $ticket->assigne->name ?? '' }}
-                            </td>
-                            <td>
-                                {{ $ticket->label ?? '' }}
                             </td>
                             <td>
                                 {{ $ticket->status->name ?? '' }}
@@ -181,15 +135,6 @@
                             </td>
                             <td>
                                 {{ $ticket->priority->name ?? '' }}
-                            </td>
-                            <td>
-                                {{ $ticket->point ?? '' }}
-                            </td>
-                            <td>
-                                {{ $ticket->design_link ?? '' }}
-                            </td>
-                            <td>
-                                {{ $ticket->related_ticket->name ?? '' }}
                             </td>
                             <td>
                                 @can('ticket_show')
