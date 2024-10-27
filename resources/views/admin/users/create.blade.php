@@ -34,6 +34,22 @@
                 <span class="help-block">{{ trans('cruds.user.fields.name_helper') }}</span>
             </div>
             <div class="form-group">
+                <label for="unit_code">{{ trans('cruds.user.fields.unit_code') }}</label>
+                <input class="form-control {{ $errors->has('unit_code') ? 'is-invalid' : '' }}" type="text" name="unit_code" id="unit_code" value="{{ old('unit_code', '') }}">
+                @if($errors->has('unit_code'))
+                    <span class="text-danger">{{ $errors->first('unit_code') }}</span>
+                @endif
+                <span class="help-block">{{ trans('cruds.user.fields.unit_code_helper') }}</span>
+            </div>
+            <div class="form-group">
+                <label for="unit_name">{{ trans('cruds.user.fields.unit_name') }}</label>
+                <input class="form-control {{ $errors->has('unit_name') ? 'is-invalid' : '' }}" type="text" name="unit_name" id="unit_name" value="{{ old('unit_name', '') }}">
+                @if($errors->has('unit_name'))
+                    <span class="text-danger">{{ $errors->first('unit_name') }}</span>
+                @endif
+                <span class="help-block">{{ trans('cruds.user.fields.unit_name_helper') }}</span>
+            </div>
+            <div class="form-group">
                 <label for="job_position_code">{{ trans('cruds.user.fields.job_position_code') }}</label>
                 <input class="form-control {{ $errors->has('job_position_code') ? 'is-invalid' : '' }}" type="text" name="job_position_code" id="job_position_code" value="{{ old('job_position_code', '') }}">
                 @if($errors->has('job_position_code'))

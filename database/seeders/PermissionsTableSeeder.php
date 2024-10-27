@@ -232,6 +232,66 @@ class PermissionsTableSeeder extends Seeder
             ],
             [
                 'id'    => 56,
+                'title' => 'meeting_note_create',
+            ],
+            [
+                'id'    => 57,
+                'title' => 'meeting_note_edit',
+            ],
+            [
+                'id'    => 58,
+                'title' => 'meeting_note_show',
+            ],
+            [
+                'id'    => 59,
+                'title' => 'meeting_note_delete',
+            ],
+            [
+                'id'    => 60,
+                'title' => 'meeting_note_access',
+            ],
+            [
+                'id'    => 61,
+                'title' => 'board_create',
+            ],
+            [
+                'id'    => 62,
+                'title' => 'board_edit',
+            ],
+            [
+                'id'    => 63,
+                'title' => 'board_show',
+            ],
+            [
+                'id'    => 64,
+                'title' => 'board_delete',
+            ],
+            [
+                'id'    => 65,
+                'title' => 'board_access',
+            ],
+            [
+                'id'    => 66,
+                'title' => 'road_map_create',
+            ],
+            [
+                'id'    => 67,
+                'title' => 'road_map_edit',
+            ],
+            [
+                'id'    => 68,
+                'title' => 'road_map_show',
+            ],
+            [
+                'id'    => 69,
+                'title' => 'road_map_delete',
+            ],
+            [
+                'id'    => 70,
+                'title' => 'road_map_access',
+            ],
+            [
+                'id'    => 71,
                 'title' => 'profile_password_edit',
             ],
         ];
