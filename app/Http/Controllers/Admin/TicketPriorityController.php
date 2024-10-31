@@ -10,16 +10,55 @@ use App\Models\TicketPriority;
 use Gate;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Yajra\DataTables\Facades\DataTables;
 
 class TicketPriorityController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         abort_if(Gate::denies('ticket_priority_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        $ticketPriorities = TicketPriority::all();
+        if ($request->ajax()) {
+            $query = TicketPriority::query()->select(sprintf('%s.*', (new TicketPriority)->table));
+            $table = Datatables::of($query);
 
-        return view('admin.ticketPriorities.index', compact('ticketPriorities'));
+            $table->addColumn('placeholder', '&nbsp;');
+            $table->addColumn('actions', '&nbsp;');
+
+            $table->editColumn('actions', function ($row) {
+                $viewGate      = 'ticket_priority_show';
+                $editGate      = 'ticket_priority_edit';
+                $deleteGate    = 'ticket_priority_delete';
+                $crudRoutePart = 'ticket-priorities';
+
+                return view('partials.datatablesActions', compact(
+                    'viewGate',
+                    'editGate',
+                    'deleteGate',
+                    'crudRoutePart',
+                    'row'
+                ));
+            });
+
+            $table->editColumn('id', function ($row) {
+                return $row->id ? $row->id : '';
+            });
+            $table->editColumn('name', function ($row) {
+                return $row->name ? $row->name : '';
+            });
+            $table->editColumn('color', function ($row) {
+                return $row->color ? $row->color : '';
+            });
+            $table->editColumn('is_default', function ($row) {
+                return '<input type="checkbox" disabled ' . ($row->is_default ? 'checked' : null) . '>';
+            });
+
+            $table->rawColumns(['actions', 'placeholder', 'is_default']);
+
+            return $table->make(true);
+        }
+
+        return view('admin.ticketPriorities.index');
     }
 
     public function create()

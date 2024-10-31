@@ -10,16 +10,58 @@ use App\Models\TicketType;
 use Gate;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Yajra\DataTables\Facades\DataTables;
 
 class TicketTypeController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         abort_if(Gate::denies('ticket_type_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        $ticketTypes = TicketType::all();
+        if ($request->ajax()) {
+            $query = TicketType::query()->select(sprintf('%s.*', (new TicketType)->table));
+            $table = Datatables::of($query);
 
-        return view('admin.ticketTypes.index', compact('ticketTypes'));
+            $table->addColumn('placeholder', '&nbsp;');
+            $table->addColumn('actions', '&nbsp;');
+
+            $table->editColumn('actions', function ($row) {
+                $viewGate      = 'ticket_type_show';
+                $editGate      = 'ticket_type_edit';
+                $deleteGate    = 'ticket_type_delete';
+                $crudRoutePart = 'ticket-types';
+
+                return view('partials.datatablesActions', compact(
+                    'viewGate',
+                    'editGate',
+                    'deleteGate',
+                    'crudRoutePart',
+                    'row'
+                ));
+            });
+
+            $table->editColumn('id', function ($row) {
+                return $row->id ? $row->id : '';
+            });
+            $table->editColumn('name', function ($row) {
+                return $row->name ? $row->name : '';
+            });
+            $table->editColumn('color', function ($row) {
+                return $row->color ? $row->color : '';
+            });
+            $table->editColumn('icon', function ($row) {
+                return $row->icon ? $row->icon : '';
+            });
+            $table->editColumn('is_default', function ($row) {
+                return '<input type="checkbox" disabled ' . ($row->is_default ? 'checked' : null) . '>';
+            });
+
+            $table->rawColumns(['actions', 'placeholder', 'is_default']);
+
+            return $table->make(true);
+        }
+
+        return view('admin.ticketTypes.index');
     }
 
     public function create()

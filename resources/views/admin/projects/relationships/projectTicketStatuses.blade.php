@@ -2,8 +2,8 @@
     @can('ticket_status_create')
         <div style="margin-bottom: 10px;" class="row">
             <div class="col-lg-12">
-                <a class="btn btn-primary" href="{{ route('admin.ticket-statuses.create') }}">
-                    <i class="fa-fw nav-icon fas fa-plus"></i> {{ trans('global.add') }} {{ trans('cruds.ticketStatus.title_singular') }}
+                <a class="btn btn-success" href="{{ route('admin.ticket-statuses.create') }}">
+                    {{ trans('global.add') }} {{ trans('cruds.ticketStatus.title_singular') }}
                 </a>
             </div>
         </div>
@@ -97,7 +97,7 @@
   let deleteButton = {
     text: deleteButtonTrans,
     url: "{{ route('admin.ticket-statuses.massDestroy') }}",
-    className: 'btn-danger btn-xs',
+    className: 'btn-danger',
     action: function (e, dt, node, config) {
       var ids = $.map(dt.rows({ selected: true }).nodes(), function (entry) {
           return $(entry).data('entry-id')
@@ -125,7 +125,7 @@
   $.extend(true, $.fn.dataTable.defaults, {
     orderCellsTop: true,
     order: [[ 1, 'desc' ]],
-    pageLength: 100,
+    pageLength: 50,
   });
   let table = $('.datatable-projectTicketStatuses:not(.ajaxTable)').DataTable({ buttons: dtButtons })
   $('a[data-toggle="tab"]').on('shown.bs.tab click', function(e){
