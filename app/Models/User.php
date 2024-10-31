@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Traits\Auditable;
+use App\Traits\HasUuid;
 use Carbon\Carbon;
 use DateTimeInterface;
 use Hash;
@@ -12,10 +13,11 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
 {
-    use SoftDeletes, Notifiable, Auditable, HasFactory;
+    use HasUuid, HasApiTokens, SoftDeletes, Notifiable, HasFactory;
 
     public $table = 'users';
 

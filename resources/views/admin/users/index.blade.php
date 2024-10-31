@@ -1,22 +1,26 @@
 @extends('layouts.admin')
 @section('content')
-@can('user_create')
-    <div style="margin-bottom: 10px;" class="row">
-        <div class="col-lg-12">
-            <a class="btn btn-success" href="{{ route('admin.users.create') }}">
-                {{ trans('global.add') }} {{ trans('cruds.user.title_singular') }}
-            </a>
-        </div>
-    </div>
-@endcan
-<div class="card">
-    <div class="card-header">
-        {{ trans('cruds.user.title_singular') }} {{ trans('global.list') }}
-    </div>
+    @can('user_create')
+        <div style="margin-bottom: 10px;" class="row">
+            <div class="col-lg-12">
+                <a class="btn btn-success" href="{{ route('admin.users.create') }}">
+                    {{ trans('global.add') }} {{ trans('cruds.user.title_singular') }}
+                </a>
+                <a class="btn btn-default" onclick="syncUser()">
+                    <i class="fa-fw nav-icon fas fa-sync"></i> Sync User
+                </a>
 
-    <div class="card-body">
-        <table class=" table table-bordered table-striped table-hover ajaxTable datatable datatable-User">
-            <thead>
+            </div>
+        </div>
+    @endcan
+    <div class="card">
+        <div class="card-header">
+            {{ trans('cruds.user.title_singular') }} {{ trans('global.list') }}
+        </div>
+
+        <div class="card-body">
+            <table class=" table table-bordered table-striped table-hover ajaxTable datatable datatable-User">
+                <thead>
                 <tr>
                     <th width="10">
 
@@ -78,99 +82,140 @@
                     <td>
                     </td>
                 </tr>
-            </thead>
-        </table>
+                </thead>
+            </table>
+        </div>
     </div>
-</div>
-
-
 
 @endsection
 @section('scripts')
-@parent
-<script>
-    $(function () {
-  let dtButtons = $.extend(true, [], $.fn.dataTable.defaults.buttons)
-@can('user_delete')
-  let deleteButtonTrans = '{{ trans('global.datatables.delete') }}';
-  let deleteButton = {
-    text: deleteButtonTrans,
-    url: "{{ route('admin.users.massDestroy') }}",
-    className: 'btn-danger',
-    action: function (e, dt, node, config) {
-      var ids = $.map(dt.rows({ selected: true }).data(), function (entry) {
-          return entry.id
-      });
+    @parent
+    <script>
+        let table
 
-      if (ids.length === 0) {
-        alert('{{ trans('global.datatables.zero_selected') }}')
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
 
-        return
-      }
+        function syncUser() {
+            Swal.fire({
+                title: 'Processing',
+                html: '<i class="fas fa-sync fa-spin"></i> Please Wait...',
+                showConfirmButton: false,
+                allowOutsideClick: false
+            });
+            $.ajax({
+                method: 'POST',
+                url: '{{ route('admin.users.sync') }}',
+                data: {
+                    client_id: 320
+                },
+                success: function (response) {
+                    let message = '<b>New : ' + response.insert + ' User</b> | <b>Updated : ' + response.update + ' User</b>'
+                    table.ajax.reload();
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Success!',
+                        html: message
+                    });
+                },
+                error: function (request, status, error) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Failed!',
+                        text: request.responseText
+                    });
+                }
+            })
+        }
 
-      if (confirm('{{ trans('global.areYouSure') }}')) {
-        $.ajax({
-          headers: {'x-csrf-token': _token},
-          method: 'POST',
-          url: config.url,
-          data: { ids: ids, _method: 'DELETE' }})
-          .done(function () { location.reload() })
-      }
-    }
-  }
-  dtButtons.push(deleteButton)
-@endcan
+        $(function () {
+            let dtButtons = $.extend(true, [], $.fn.dataTable.defaults.buttons)
+            @can('user_delete')
+            let deleteButtonTrans = '{{ trans('global.datatables.delete') }}';
+            let deleteButton = {
+                text: deleteButtonTrans,
+                url: "{{ route('admin.users.massDestroy') }}",
+                className: 'btn-danger',
+                action: function (e, dt, node, config) {
+                    var ids = $.map(dt.rows({selected: true}).data(), function (entry) {
+                        return entry.id
+                    });
 
-  let dtOverrideGlobals = {
-    buttons: dtButtons,
-    processing: true,
-    serverSide: true,
-    retrieve: true,
-    aaSorting: [],
-    ajax: "{{ route('admin.users.index') }}",
-    columns: [
-      { data: 'placeholder', name: 'placeholder' },
-{ data: 'id', name: 'id' },
-{ data: 'nik', name: 'nik' },
-{ data: 'name', name: 'name' },
-{ data: 'unit_name', name: 'unit_name' },
-{ data: 'job_position_text', name: 'job_position_text' },
-{ data: 'email', name: 'email' },
-{ data: 'roles', name: 'roles.title' },
-{ data: 'actions', name: '{{ trans('global.actions') }}' }
-    ],
-    orderCellsTop: true,
-    order: [[ 1, 'desc' ]],
-    pageLength: 50,
-  };
-  let table = $('.datatable-User').DataTable(dtOverrideGlobals);
-  $('a[data-toggle="tab"]').on('shown.bs.tab click', function(e){
-      $($.fn.dataTable.tables(true)).DataTable()
-          .columns.adjust();
-  });
-  
-let visibleColumnsIndexes = null;
-$('.datatable thead').on('input', '.search', function () {
-      let strict = $(this).attr('strict') || false
-      let value = strict && this.value ? "^" + this.value + "$" : this.value
+                    if (ids.length === 0) {
+                        alert('{{ trans('global.datatables.zero_selected') }}')
+                        return
+                    }
 
-      let index = $(this).parent().index()
-      if (visibleColumnsIndexes !== null) {
-        index = visibleColumnsIndexes[index]
-      }
+                    if (confirm('{{ trans('global.areYouSure') }}')) {
+                        $.ajax({
+                            headers: {'x-csrf-token': _token},
+                            method: 'POST',
+                            url: config.url,
+                            data: {ids: ids, _method: 'DELETE'}
+                        })
+                        .done(function () {
+                            table.ajax.reload();
+                        })
+                    }
+                }
+            }
+            dtButtons.push(deleteButton)
+            @endcan
 
-      table
-        .column(index)
-        .search(value, strict)
-        .draw()
-  });
-table.on('column-visibility.dt', function(e, settings, column, state) {
-      visibleColumnsIndexes = []
-      table.columns(":visible").every(function(colIdx) {
-          visibleColumnsIndexes.push(colIdx);
-      });
-  })
-});
+            let dtOverrideGlobals = {
+                buttons: dtButtons,
+                processing: true,
+                serverSide: true,
+                retrieve: true,
+                aaSorting: [],
+                ajax: "{{ route('admin.users.index') }}",
+                columns: [
+                    {data: 'placeholder', name: 'placeholder'},
+                    {data: 'id', name: 'id'},
+                    {data: 'nik', name: 'nik'},
+                    {data: 'name', name: 'name'},
+                    {data: 'unit_name', name: 'unit_name'},
+                    {data: 'job_position_text', name: 'job_position_text'},
+                    {data: 'email', name: 'email'},
+                    {data: 'roles', name: 'roles.title'},
+                    {data: 'actions', name: '{{ trans('global.actions') }}'}
+                ],
+                orderCellsTop: true,
+                order: [[1, 'desc']],
+                pageLength: 50,
+            };
 
-</script>
+            table = $('.datatable-User').DataTable(dtOverrideGlobals);
+            $('a[data-toggle="tab"]').on('shown.bs.tab click', function (e) {
+                $($.fn.dataTable.tables(true)).DataTable()
+                    .columns.adjust();
+            });
+
+            let visibleColumnsIndexes = null;
+            $('.datatable thead').on('input', '.search', function () {
+                let strict = $(this).attr('strict') || false
+                let value = strict && this.value ? "^" + this.value + "$" : this.value
+
+                let index = $(this).parent().index()
+                if (visibleColumnsIndexes !== null) {
+                    index = visibleColumnsIndexes[index]
+                }
+
+                table
+                    .column(index)
+                    .search(value, strict)
+                    .draw()
+            });
+            table.on('column-visibility.dt', function (e, settings, column, state) {
+                visibleColumnsIndexes = []
+                table.columns(":visible").every(function (colIdx) {
+                    visibleColumnsIndexes.push(colIdx);
+                });
+            })
+        });
+
+    </script>
 @endsection

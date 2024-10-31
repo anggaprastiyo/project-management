@@ -9,7 +9,10 @@ use App\Http\Requests\UpdateUserRequest;
 use App\Models\Role;
 use App\Models\User;
 use Gate;
+use GuzzleHttp\Client;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Ramsey\Uuid\Uuid;
 use Symfony\Component\HttpFoundation\Response;
 use Yajra\DataTables\Facades\DataTables;
 
@@ -142,4 +145,76 @@ class UsersController extends Controller
 
         return response(null, Response::HTTP_NO_CONTENT);
     }
+
+    public function syncUser(Request $request)
+    {
+        $this->validate($request, [
+            'client_id' => 'required'
+        ]);
+
+        DB::beginTransaction();
+        try {
+
+            // call API
+            $client = new Client();
+            $response = $client->post(config('constant.sync_user.url'), [
+                'auth' => [config('constant.sync_user.username'), config('constant.sync_user.password')],
+                'json' => [
+                    'CLIENT' => $request->input('client_id')
+                ]
+            ]);
+
+            // Handle response
+            if ($response->getStatusCode() == 200) {
+
+                // parsing result
+                $body = $response->getBody();
+                $data = json_decode($body, true);
+                $newUsers = $data['ZDATA']['item'];
+
+                // get all current user
+                $currentUsers = User::all();
+                $insertUsers = collect();
+                $updatedUser = 0;
+
+                foreach ($newUsers as $newUser) {
+                    if (isset($newUser['UNITCODE']) && isset($newUser['POSITIONNAME'])) {
+                        $dataUser = collect()
+                            ->put('nik', $newUser['NIK'])
+                            ->put('name', $newUser['NAMA'])
+                            ->put('unit_code', $newUser['UNITCODE'])
+                            ->put('unit_name', $newUser['UNITNAME'])
+                            ->put('job_position_code', $newUser['POSITIONCODE'])
+                            ->put('job_position_text', $newUser['POSITIONNAME']);
+
+                        $findUser = $currentUsers->where('nik', $newUser['NIK'])->first();
+                        if (is_null($findUser)) {
+                            $dataUser->put('uuid', Uuid::uuid4()->toString());
+                            $insertUsers->push($dataUser);
+                        } else {
+                            if ($newUser['UNITCODE'] != $findUser->unit_code || $newUser['POSITIONCODE'] != $findUser->job_position_code) {
+                                $findUser->update($dataUser->toArray());
+                                $updatedUser++;
+                            }
+                        }
+                    }
+                }
+
+                // mass insert users
+                User::insert($insertUsers->toArray());
+
+                DB::commit();
+
+                return response()->json(['message' => 'success', 'insert' => $insertUsers->count(), 'update' => $updatedUser], Response::HTTP_OK);
+
+            } else {
+                return response()->json(['message' => 'Failed to Fetch API'], Response::HTTP_UNPROCESSABLE_ENTITY);
+            }
+
+        } catch (\Exception $exception) {
+            DB::rollBack();
+            return response()->json(['message' => $exception->getMessage()], Response::HTTP_UNPROCESSABLE_ENTITY);
+        }
+    }
+
 }
