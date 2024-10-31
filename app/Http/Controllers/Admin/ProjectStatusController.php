@@ -10,16 +10,55 @@ use App\Models\ProjectStatus;
 use Gate;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Yajra\DataTables\Facades\DataTables;
 
 class ProjectStatusController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         abort_if(Gate::denies('project_status_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        $projectStatuses = ProjectStatus::all();
+        if ($request->ajax()) {
+            $query = ProjectStatus::query()->select(sprintf('%s.*', (new ProjectStatus)->table));
+            $table = Datatables::of($query);
 
-        return view('admin.projectStatuses.index', compact('projectStatuses'));
+            $table->addColumn('placeholder', '&nbsp;');
+            $table->addColumn('actions', '&nbsp;');
+
+            $table->editColumn('actions', function ($row) {
+                $viewGate      = 'project_status_show';
+                $editGate      = 'project_status_edit';
+                $deleteGate    = 'project_status_delete';
+                $crudRoutePart = 'project-statuses';
+
+                return view('partials.datatablesActions', compact(
+                    'viewGate',
+                    'editGate',
+                    'deleteGate',
+                    'crudRoutePart',
+                    'row'
+                ));
+            });
+
+            $table->editColumn('id', function ($row) {
+                return $row->id ? $row->id : '';
+            });
+            $table->editColumn('name', function ($row) {
+                return $row->name ? $row->name : '';
+            });
+            $table->editColumn('color', function ($row) {
+                return $row->color ? $row->color : '';
+            });
+            $table->editColumn('is_default', function ($row) {
+                return '<input type="checkbox" disabled ' . ($row->is_default ? 'checked' : null) . '>';
+            });
+
+            $table->rawColumns(['actions', 'placeholder', 'is_default']);
+
+            return $table->make(true);
+        }
+
+        return view('admin.projectStatuses.index');
     }
 
     public function create()

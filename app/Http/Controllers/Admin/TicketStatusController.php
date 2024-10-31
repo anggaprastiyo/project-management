@@ -11,18 +11,57 @@ use App\Models\TicketStatus;
 use Gate;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Yajra\DataTables\Facades\DataTables;
 
 class TicketStatusController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         abort_if(Gate::denies('ticket_status_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        $ticketStatuses = TicketStatus::with(['project'])->get();
+        if ($request->ajax()) {
+            $query = TicketStatus::with(['project'])->select(sprintf('%s.*', (new TicketStatus)->table));
+            $table = Datatables::of($query);
+
+            $table->addColumn('placeholder', '&nbsp;');
+            $table->addColumn('actions', '&nbsp;');
+
+            $table->editColumn('actions', function ($row) {
+                $viewGate      = 'ticket_status_show';
+                $editGate      = 'ticket_status_edit';
+                $deleteGate    = 'ticket_status_delete';
+                $crudRoutePart = 'ticket-statuses';
+
+                return view('partials.datatablesActions', compact(
+                    'viewGate',
+                    'editGate',
+                    'deleteGate',
+                    'crudRoutePart',
+                    'row'
+                ));
+            });
+
+            $table->editColumn('id', function ($row) {
+                return $row->id ? $row->id : '';
+            });
+            $table->editColumn('name', function ($row) {
+                return $row->name ? $row->name : '';
+            });
+            $table->editColumn('color', function ($row) {
+                return $row->color ? $row->color : '';
+            });
+            $table->editColumn('order', function ($row) {
+                return $row->order ? $row->order : '';
+            });
+
+            $table->rawColumns(['actions', 'placeholder']);
+
+            return $table->make(true);
+        }
 
         $projects = Project::get();
 
-        return view('admin.ticketStatuses.index', compact('projects', 'ticketStatuses'));
+        return view('admin.ticketStatuses.index', compact('projects'));
     }
 
     public function create()

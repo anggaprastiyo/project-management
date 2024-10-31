@@ -4,7 +4,7 @@
     <div class="login-logo">
         <div class="login-logo">
             <a href="{{ route('admin.home') }}">
-                <img src="{{ asset('logo-taspen-project.png') }}" style="width: 300px">
+                {{ trans('panel.site_title') }}
             </a>
         </div>
     </div>

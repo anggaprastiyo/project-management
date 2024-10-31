@@ -1,239 +1,176 @@
 @extends('layouts.admin')
 @section('content')
-  @can('user_create')
+@can('user_create')
     <div style="margin-bottom: 10px;" class="row">
-      <div class="col-lg-12">
-        <a class="btn btn-primary btn-sm" href="{{ route('admin.users.create') }}">
-          <i class="fa-fw nav-icon fas fa-plus"></i> {{ trans('global.add') }} {{ trans('cruds.user.title_singular') }}
-        </a>
-        <a class="btn btn-default btn-sm" href="{{ route('admin.users.create') }}">
-          <i class="fa-fw nav-icon fas fa-sync"></i> Sync User
-        </a>
-      </div>
+        <div class="col-lg-12">
+            <a class="btn btn-success" href="{{ route('admin.users.create') }}">
+                {{ trans('global.add') }} {{ trans('cruds.user.title_singular') }}
+            </a>
+        </div>
     </div>
-  @endcan
-  <div class="card">
+@endcan
+<div class="card">
     <div class="card-header">
-      {{ trans('cruds.user.title_singular') }} {{ trans('global.list') }}
+        {{ trans('cruds.user.title_singular') }} {{ trans('global.list') }}
     </div>
 
     <div class="card-body">
-      <div class="table-responsive">
-        <table class=" table table-bordered table-striped table-hover datatable datatable-User">
-          <thead>
-          <tr>
-            <th width="10">
+        <table class=" table table-bordered table-striped table-hover ajaxTable datatable datatable-User">
+            <thead>
+                <tr>
+                    <th width="10">
 
-            </th>
-            <th>
-              &nbsp;
-            </th>
-            <th>
-              {{ trans('cruds.user.fields.id') }}
-            </th>
-            <th>
-              {{ trans('cruds.user.fields.nik') }}
-            </th>
-            <th>
-              {{ trans('cruds.user.fields.name') }}
-            </th>
-            <th>
-              {{ trans('cruds.user.fields.unit_code') }}
-            </th>
-            <th>
-              {{ trans('cruds.user.fields.unit_name') }}
-            </th>
-            <th>
-              {{ trans('cruds.user.fields.job_position_code') }}
-            </th>
-            <th>
-              {{ trans('cruds.user.fields.job_position_text') }}
-            </th>
-            <th>
-              {{ trans('cruds.user.fields.email') }}
-            </th>
-            <th>
-              {{ trans('cruds.user.fields.roles') }}
-            </th>
-          </tr>
-          <tr>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td>
-              <input class="search" type="text" placeholder="{{ trans('global.search') }}">
-            </td>
-            <td>
-              <input class="search" type="text" placeholder="{{ trans('global.search') }}">
-            </td>
-            <td>
-              <input class="search" type="text" placeholder="{{ trans('global.search') }}">
-            </td>
-            <td>
-              <input class="search" type="text" placeholder="{{ trans('global.search') }}">
-            </td>
-            <td>
-              <input class="search" type="text" placeholder="{{ trans('global.search') }}">
-            </td>
-            <td>
-              <input class="search" type="text" placeholder="{{ trans('global.search') }}">
-            </td>
-            <td>
-              <input class="search" type="text" placeholder="{{ trans('global.search') }}">
-            </td>
-            <td>
-              <select class="search">
-                <option value>{{ trans('global.all') }}</option>
-                @foreach($roles as $key => $item)
-                  <option value="{{ $item->title }}">{{ $item->title }}</option>
-                @endforeach
-              </select>
-            </td>
-          </tr>
-          </thead>
-          <tbody>
-          @foreach($users as $key => $user)
-            <tr data-entry-id="{{ $user->id }}">
-              <td>
-
-              </td>
-              <td>
-                <div class="btn-group">
-                  @can('user_show')
-                    <a class="btn btn-xs btn-primary" href="{{ route('admin.users.show', $user->id) }}">
-                      <i class="fas fa-fw fa-eye"></i>
-                    </a>
-                  @endcan
-
-                  @can('user_edit')
-                    <a class="btn btn-xs btn-info" href="{{ route('admin.users.edit', $user->id) }}">
-                      <i class="fas fa-fw fa-edit"></i>
-                    </a>
-                  @endcan
-
-                  @can('user_delete')
-                    @if ($userLogin->id != $user->id)
-                      <form action="{{ route('admin.users.destroy', $user->id) }}" method="POST"
-                            onsubmit="return confirm('{{ trans('global.areYouSure') }}');"
-                            style="display: inline-block;">
-                        <input type="hidden" name="_method" value="DELETE">
-                        <input type="hidden" name="_token" value="{{ csrf_token() }}">
-                        <button class="btn btn-xs btn-danger" type="submit"><i class="fas fa-fw fa-trash"></i></button>
-                      </form>
-                    @endif
-                  @endcan
-                </div>
-              </td>
-              <td>
-                {{ $user->id ?? '' }}
-              </td>
-              <td>
-                {{ $user->nik ?? '' }}
-              </td>
-              <td>
-                {{ $user->name ?? '' }}
-              </td>
-              <td>
-                {{ $user->unit_code ?? '' }}
-              </td>
-              <td>
-                {{ $user->unit_name ?? '' }}
-              </td>
-              <td>
-                {{ $user->job_position_code ?? '' }}
-              </td>
-              <td>
-                {{ $user->job_position_text ?? '' }}
-              </td>
-              <td>
-                {{ $user->email ?? '' }}
-              </td>
-              <td>
-                @foreach($user->roles as $key => $item)
-                  <span class="badge badge-info">{{ $item->title }}</span>
-                @endforeach
-              </td>
-            </tr>
-          @endforeach
-          </tbody>
+                    </th>
+                    <th>
+                        {{ trans('cruds.user.fields.id') }}
+                    </th>
+                    <th>
+                        {{ trans('cruds.user.fields.nik') }}
+                    </th>
+                    <th>
+                        {{ trans('cruds.user.fields.name') }}
+                    </th>
+                    <th>
+                        {{ trans('cruds.user.fields.unit_name') }}
+                    </th>
+                    <th>
+                        {{ trans('cruds.user.fields.job_position_text') }}
+                    </th>
+                    <th>
+                        {{ trans('cruds.user.fields.email') }}
+                    </th>
+                    <th>
+                        {{ trans('cruds.user.fields.roles') }}
+                    </th>
+                    <th>
+                        &nbsp;
+                    </th>
+                </tr>
+                <tr>
+                    <td>
+                    </td>
+                    <td>
+                        <input class="search" type="text" placeholder="{{ trans('global.search') }}">
+                    </td>
+                    <td>
+                        <input class="search" type="text" placeholder="{{ trans('global.search') }}">
+                    </td>
+                    <td>
+                        <input class="search" type="text" placeholder="{{ trans('global.search') }}">
+                    </td>
+                    <td>
+                        <input class="search" type="text" placeholder="{{ trans('global.search') }}">
+                    </td>
+                    <td>
+                        <input class="search" type="text" placeholder="{{ trans('global.search') }}">
+                    </td>
+                    <td>
+                        <input class="search" type="text" placeholder="{{ trans('global.search') }}">
+                    </td>
+                    <td>
+                        <select class="search">
+                            <option value>{{ trans('global.all') }}</option>
+                            @foreach($roles as $key => $item)
+                                <option value="{{ $item->title }}">{{ $item->title }}</option>
+                            @endforeach
+                        </select>
+                    </td>
+                    <td>
+                    </td>
+                </tr>
+            </thead>
         </table>
-      </div>
     </div>
-  </div>
+</div>
+
+
 
 @endsection
 @section('scripts')
-  @parent
-  <script>
-      $(function () {
-          let dtButtons = $.extend(true, [], $.fn.dataTable.defaults.buttons)
-        @can('user_delete')
-          let deleteButtonTrans = '{{ trans('global.datatables.delete') }}'
-          let deleteButton = {
-              text: deleteButtonTrans,
-              url: "{{ route('admin.users.massDestroy') }}",
-              className: 'btn-danger btn-xs',
-              action: function (e, dt, node, config) {
-                  var ids = $.map(dt.rows({selected: true}).nodes(), function (entry) {
-                      return $(entry).data('entry-id')
-                  });
+@parent
+<script>
+    $(function () {
+  let dtButtons = $.extend(true, [], $.fn.dataTable.defaults.buttons)
+@can('user_delete')
+  let deleteButtonTrans = '{{ trans('global.datatables.delete') }}';
+  let deleteButton = {
+    text: deleteButtonTrans,
+    url: "{{ route('admin.users.massDestroy') }}",
+    className: 'btn-danger',
+    action: function (e, dt, node, config) {
+      var ids = $.map(dt.rows({ selected: true }).data(), function (entry) {
+          return entry.id
+      });
 
-                  if (ids.length === 0) {
-                      alert('{{ trans('global.datatables.zero_selected') }}')
+      if (ids.length === 0) {
+        alert('{{ trans('global.datatables.zero_selected') }}')
 
-                      return
-                  }
+        return
+      }
 
-                  if (confirm('{{ trans('global.areYouSure') }}')) {
-                      $.ajax({
-                          headers: {'x-csrf-token': _token},
-                          method: 'POST',
-                          url: config.url,
-                          data: {ids: ids, _method: 'DELETE'}
-                      })
-                          .done(function () {
-                              location.reload()
-                          })
-                  }
-              }
-          }
-          dtButtons.push(deleteButton)
-        @endcan
+      if (confirm('{{ trans('global.areYouSure') }}')) {
+        $.ajax({
+          headers: {'x-csrf-token': _token},
+          method: 'POST',
+          url: config.url,
+          data: { ids: ids, _method: 'DELETE' }})
+          .done(function () { location.reload() })
+      }
+    }
+  }
+  dtButtons.push(deleteButton)
+@endcan
 
-        $.extend(true, $.fn.dataTable.defaults, {
-            orderCellsTop: true,
-            order: [[2, 'desc']],
-            pageLength: 100,
-        });
+  let dtOverrideGlobals = {
+    buttons: dtButtons,
+    processing: true,
+    serverSide: true,
+    retrieve: true,
+    aaSorting: [],
+    ajax: "{{ route('admin.users.index') }}",
+    columns: [
+      { data: 'placeholder', name: 'placeholder' },
+{ data: 'id', name: 'id' },
+{ data: 'nik', name: 'nik' },
+{ data: 'name', name: 'name' },
+{ data: 'unit_name', name: 'unit_name' },
+{ data: 'job_position_text', name: 'job_position_text' },
+{ data: 'email', name: 'email' },
+{ data: 'roles', name: 'roles.title' },
+{ data: 'actions', name: '{{ trans('global.actions') }}' }
+    ],
+    orderCellsTop: true,
+    order: [[ 1, 'desc' ]],
+    pageLength: 50,
+  };
+  let table = $('.datatable-User').DataTable(dtOverrideGlobals);
+  $('a[data-toggle="tab"]').on('shown.bs.tab click', function(e){
+      $($.fn.dataTable.tables(true)).DataTable()
+          .columns.adjust();
+  });
+  
+let visibleColumnsIndexes = null;
+$('.datatable thead').on('input', '.search', function () {
+      let strict = $(this).attr('strict') || false
+      let value = strict && this.value ? "^" + this.value + "$" : this.value
 
-          let table = $('.datatable-User:not(.ajaxTable)').DataTable({buttons: dtButtons})
-          $('a[data-toggle="tab"]').on('shown.bs.tab click', function (e) {
-              $($.fn.dataTable.tables(true)).DataTable().columns.adjust();
-          });
+      let index = $(this).parent().index()
+      if (visibleColumnsIndexes !== null) {
+        index = visibleColumnsIndexes[index]
+      }
 
-          let visibleColumnsIndexes = null;
-          $('.datatable thead').on('input', '.search', function () {
-              let strict = $(this).attr('strict') || false
-              let value = strict && this.value ? "^" + this.value + "$" : this.value
+      table
+        .column(index)
+        .search(value, strict)
+        .draw()
+  });
+table.on('column-visibility.dt', function(e, settings, column, state) {
+      visibleColumnsIndexes = []
+      table.columns(":visible").every(function(colIdx) {
+          visibleColumnsIndexes.push(colIdx);
+      });
+  })
+});
 
-              let index = $(this).parent().index()
-              if (visibleColumnsIndexes !== null) {
-                  index = visibleColumnsIndexes[index]
-              }
-
-              table
-                  .column(index)
-                  .search(value, strict)
-                  .draw()
-          });
-
-          table.on('column-visibility.dt', function (e, settings, column, state) {
-              visibleColumnsIndexes = []
-              table.columns(":visible").every(function (colIdx) {
-                  visibleColumnsIndexes.push(colIdx);
-              });
-          })
-      })
-
-  </script>
+</script>
 @endsection
