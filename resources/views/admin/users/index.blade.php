@@ -53,12 +53,8 @@
                 <tr>
                     <td>
                     </td>
-                    <td>
-                        <input class="search" type="text" placeholder="{{ trans('global.search') }}">
-                    </td>
-                    <td>
-                        <input class="search" type="text" placeholder="{{ trans('global.search') }}">
-                    </td>
+                    <td></td>
+                    <td></td>
                     <td>
                         <input class="search" type="text" placeholder="{{ trans('global.search') }}">
                     </td>
@@ -100,6 +96,23 @@
         });
 
         function syncUser() {
+
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "When synchronizing users, user data will be replaced with the latest data!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, synchronize it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    syncAction()
+                }
+            });
+        }
+
+        function syncAction() {
             Swal.fire({
                 title: 'Processing',
                 html: '<i class="fas fa-sync fa-spin"></i> Please Wait...',
@@ -118,7 +131,8 @@
                     Swal.fire({
                         icon: 'success',
                         title: 'Success!',
-                        html: message
+                        html: message,
+                        confirmButtonColor: '#3085d6',
                     });
                 },
                 error: function (request, status, error) {
@@ -149,17 +163,27 @@
                         return
                     }
 
-                    if (confirm('{{ trans('global.areYouSure') }}')) {
-                        $.ajax({
-                            headers: {'x-csrf-token': _token},
-                            method: 'POST',
-                            url: config.url,
-                            data: {ids: ids, _method: 'DELETE'}
-                        })
-                        .done(function () {
-                            table.ajax.reload();
-                        })
-                    }
+                    Swal.fire({
+                        title: 'Are you sure?',
+                        text: "You won't be able to revert this!",
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: 'Yes, delete it!'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            $.ajax({
+                                headers: {'x-csrf-token': _token},
+                                method: 'POST',
+                                url: config.url,
+                                data: {ids: ids, _method: 'DELETE'}
+                            })
+                                .done(function () {
+                                    table.ajax.reload();
+                                })
+                        }
+                    });
                 }
             }
             dtButtons.push(deleteButton)
@@ -181,7 +205,7 @@
                     {data: 'job_position_text', name: 'job_position_text'},
                     {data: 'email', name: 'email'},
                     {data: 'roles', name: 'roles.title'},
-                    {data: 'actions', name: '{{ trans('global.actions') }}'}
+                    {data: 'actions', name: '{{ trans('global.actions') }}', width: '8%'}
                 ],
                 orderCellsTop: true,
                 order: [[1, 'desc']],
@@ -190,8 +214,7 @@
 
             table = $('.datatable-User').DataTable(dtOverrideGlobals);
             $('a[data-toggle="tab"]').on('shown.bs.tab click', function (e) {
-                $($.fn.dataTable.tables(true)).DataTable()
-                    .columns.adjust();
+                $($.fn.dataTable.tables(true)).DataTable().columns.adjust();
             });
 
             let visibleColumnsIndexes = null;
@@ -204,11 +227,11 @@
                     index = visibleColumnsIndexes[index]
                 }
 
-                table
-                    .column(index)
+                table.column(index)
                     .search(value, strict)
                     .draw()
             });
+
             table.on('column-visibility.dt', function (e, settings, column, state) {
                 visibleColumnsIndexes = []
                 table.columns(":visible").every(function (colIdx) {
@@ -216,6 +239,5 @@
                 });
             })
         });
-
     </script>
 @endsection
