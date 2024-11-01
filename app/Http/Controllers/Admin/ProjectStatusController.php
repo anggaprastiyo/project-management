@@ -75,10 +75,11 @@ class ProjectStatusController extends Controller
         return redirect()->route('admin.project-statuses.index');
     }
 
-    public function edit(ProjectStatus $projectStatus)
+    public function edit($uuid)
     {
         abort_if(Gate::denies('project_status_edit'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
+        $projectStatus = ProjectStatus::where('uuid', $uuid)->first();
         return view('admin.projectStatuses.edit', compact('projectStatus'));
     }
 
@@ -89,10 +90,11 @@ class ProjectStatusController extends Controller
         return redirect()->route('admin.project-statuses.index');
     }
 
-    public function show(ProjectStatus $projectStatus)
+    public function show($uuid)
     {
         abort_if(Gate::denies('project_status_show'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
+        $projectStatus = ProjectStatus::where('uuid', $uuid)->first();
         $projectStatus->load('projectStatusProjects');
 
         return view('admin.projectStatuses.show', compact('projectStatus'));

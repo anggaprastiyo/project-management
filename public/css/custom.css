@@ -152,3 +152,15 @@ div.dt-button-collection {
 .btn-group-xs > .btn, .btn-xs {
     margin-left: 2px;
 }
+
+.color-circle {
+    display: inline-block;
+    width: 17px;
+    height: 17px;
+    border-radius: 20%;
+}
+
+.alert-info, .bg-info, .label-info {
+    padding: 5px;
+    border-radius: 3px;
+}

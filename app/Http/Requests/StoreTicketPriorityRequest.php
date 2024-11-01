@@ -30,7 +30,7 @@ class StoreTicketPriorityRequest extends FormRequest
                 'required',
             ],
             'is_default' => [
-                'required',
+                'nullable',
             ],
         ];
     }

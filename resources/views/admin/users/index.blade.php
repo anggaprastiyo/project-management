@@ -26,9 +26,6 @@
 
                     </th>
                     <th>
-                        {{ trans('cruds.user.fields.id') }}
-                    </th>
-                    <th>
                         {{ trans('cruds.user.fields.nik') }}
                     </th>
                     <th>
@@ -41,9 +38,6 @@
                         {{ trans('cruds.user.fields.job_position_text') }}
                     </th>
                     <th>
-                        {{ trans('cruds.user.fields.email') }}
-                    </th>
-                    <th>
                         {{ trans('cruds.user.fields.roles') }}
                     </th>
                     <th>
@@ -51,13 +45,8 @@
                     </th>
                 </tr>
                 <tr>
-                    <td>
-                    </td>
                     <td></td>
                     <td></td>
-                    <td>
-                        <input class="search" type="text" placeholder="{{ trans('global.search') }}">
-                    </td>
                     <td>
                         <input class="search" type="text" placeholder="{{ trans('global.search') }}">
                     </td>
@@ -198,12 +187,10 @@
                 ajax: "{{ route('admin.users.index') }}",
                 columns: [
                     {data: 'placeholder', name: 'placeholder'},
-                    {data: 'id', name: 'id'},
                     {data: 'nik', name: 'nik'},
                     {data: 'name', name: 'name'},
                     {data: 'unit_name', name: 'unit_name'},
                     {data: 'job_position_text', name: 'job_position_text'},
-                    {data: 'email', name: 'email'},
                     {data: 'roles', name: 'roles.title'},
                     {data: 'actions', name: '{{ trans('global.actions') }}', width: '8%'}
                 ],

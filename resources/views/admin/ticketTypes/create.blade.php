@@ -19,7 +19,7 @@
             </div>
             <div class="form-group">
                 <label class="required" for="color">{{ trans('cruds.ticketType.fields.color') }}</label>
-                <input class="form-control {{ $errors->has('color') ? 'is-invalid' : '' }}" type="text" name="color" id="color" value="{{ old('color', '') }}" required>
+                <input class="form-control col-md-1 {{ $errors->has('color') ? 'is-invalid' : '' }}" type="color" name="color" id="color" value="{{ old('color', '') }}" required>
                 @if($errors->has('color'))
                     <span class="text-danger">{{ $errors->first('color') }}</span>
                 @endif
@@ -27,7 +27,7 @@
             </div>
             <div class="form-group">
                 <label class="required" for="icon">{{ trans('cruds.ticketType.fields.icon') }}</label>
-                <input class="form-control {{ $errors->has('icon') ? 'is-invalid' : '' }}" type="text" name="icon" id="icon" value="{{ old('icon', '') }}" required>
+                <input class="form-control col-md-1 {{ $errors->has('icon') ? 'is-invalid' : '' }}" type="text" name="icon" id="icon" value="{{ old('icon', '') }}" required>
                 @if($errors->has('icon'))
                     <span class="text-danger">{{ $errors->first('icon') }}</span>
                 @endif

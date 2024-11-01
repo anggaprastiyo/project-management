@@ -52,7 +52,7 @@ class StoreUserRequest extends FormRequest
                 'nullable',
             ],
             'email' => [
-                'required',
+                'nullable',
                 'unique:users',
             ],
             'password' => [

@@ -30,7 +30,7 @@ class UpdateTicketPriorityRequest extends FormRequest
                 'required',
             ],
             'is_default' => [
-                'required',
+                'nullable',
             ],
         ];
     }

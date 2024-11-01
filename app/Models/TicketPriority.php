@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Traits\HasUuid;
 use DateTimeInterface;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -9,7 +10,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class TicketPriority extends Model
 {
-    use SoftDeletes, HasFactory;
+    use HasUuid, SoftDeletes, HasFactory;
 
     public $table = 'ticket_priorities';
 

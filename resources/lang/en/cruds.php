@@ -207,6 +207,8 @@ return [
             'color_helper'      => ' ',
             'order'             => 'Status Order',
             'order_helper'      => ' ',
+            'is_default'        => 'Default Status',
+            'is_default_helper' => 'If checked, this status will be automatically affected to new ticket status',
             'created_at'        => 'Created at',
             'created_at_helper' => ' ',
             'updated_at'        => 'Updated at',

@@ -78,10 +78,11 @@ class TicketTypeController extends Controller
         return redirect()->route('admin.ticket-types.index');
     }
 
-    public function edit(TicketType $ticketType)
+    public function edit($uuid)
     {
         abort_if(Gate::denies('ticket_type_edit'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
+        $ticketType = TicketType::where('uuid', $uuid)->first();
         return view('admin.ticketTypes.edit', compact('ticketType'));
     }
 
@@ -92,10 +93,11 @@ class TicketTypeController extends Controller
         return redirect()->route('admin.ticket-types.index');
     }
 
-    public function show(TicketType $ticketType)
+    public function show($uuid)
     {
         abort_if(Gate::denies('ticket_type_show'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
+        $ticketType = TicketType::where('uuid', $uuid)->first();
         return view('admin.ticketTypes.show', compact('ticketType'));
     }
 

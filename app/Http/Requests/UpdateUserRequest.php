@@ -52,7 +52,7 @@ class UpdateUserRequest extends FormRequest
                 'nullable',
             ],
             'email' => [
-                'required',
+                'nullable',
                 'unique:users,email,' . request()->route('user')->id,
             ],
             'roles.*' => [

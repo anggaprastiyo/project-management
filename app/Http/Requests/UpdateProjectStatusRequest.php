@@ -30,7 +30,7 @@ class UpdateProjectStatusRequest extends FormRequest
                 'required',
             ],
             'is_default' => [
-                'required',
+                'nullable',
             ],
         ];
     }

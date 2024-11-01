@@ -98,12 +98,12 @@ class UsersController extends Controller
         return redirect()->route('admin.users.index');
     }
 
-    public function edit(User $user)
+    public function edit($uuid)
     {
         abort_if(Gate::denies('user_edit'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
+        $user = User::where('uuid', $uuid)->first();
         $roles = Role::pluck('title', 'id');
-
         $user->load('roles');
 
         return view('admin.users.edit', compact('roles', 'user'));
@@ -117,10 +117,11 @@ class UsersController extends Controller
         return redirect()->route('admin.users.index');
     }
 
-    public function show(User $user)
+    public function show($uuid)
     {
         abort_if(Gate::denies('user_show'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
+        $user = User::where('uuid', $uuid)->first();
         $user->load('roles', 'projectOwnerProjects', 'assigneTickets');
 
         return view('admin.users.show', compact('user'));
@@ -187,6 +188,7 @@ class UsersController extends Controller
                             ->put('job_position_code', $newUser['POSITIONCODE'])
                             ->put('job_position_text', $newUser['POSITIONNAME']);
 
+                        // find user
                         $findUser = $currentUsers->where('nik', $newUser['NIK'])->first();
                         if (is_null($findUser)) {
                             $dataUser->put('uuid', Uuid::uuid4()->toString());
@@ -203,6 +205,23 @@ class UsersController extends Controller
                 // mass insert users
                 User::insert($insertUsers->toArray());
 
+                // checking user with no roles
+                $allUsers = User::select(['users.id', 'role_user.role_id'])
+                    ->leftJoin('role_user', 'role_user.user_id', '=', 'users.id')
+                    ->whereNull('role_id')
+                    ->get();
+
+                $insertRoleUsers = collect();
+                foreach ($allUsers as $user) {
+                    $dataRoleUser = collect()
+                        ->put('user_id', $user->id)
+                        ->put('role_id', config('constant.default_role_id'));
+                    $insertRoleUsers->push($dataRoleUser);
+                }
+
+                // mass insert role users
+                DB::table('role_user')->insert($insertRoleUsers->toArray());
+
                 DB::commit();
 
                 return response()->json(['message' => 'success', 'insert' => $insertUsers->count(), 'update' => $updatedUser], Response::HTTP_OK);
@@ -216,5 +235,4 @@ class UsersController extends Controller
             return response()->json(['message' => $exception->getMessage()], Response::HTTP_UNPROCESSABLE_ENTITY);
         }
     }
-
 }

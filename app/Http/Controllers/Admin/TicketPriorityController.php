@@ -75,9 +75,10 @@ class TicketPriorityController extends Controller
         return redirect()->route('admin.ticket-priorities.index');
     }
 
-    public function edit(TicketPriority $ticketPriority)
+    public function edit($uuid)
     {
         abort_if(Gate::denies('ticket_priority_edit'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+        $ticketPriority = TicketPriority::where('uuid', $uuid)->first();
 
         return view('admin.ticketPriorities.edit', compact('ticketPriority'));
     }
@@ -89,10 +90,10 @@ class TicketPriorityController extends Controller
         return redirect()->route('admin.ticket-priorities.index');
     }
 
-    public function show(TicketPriority $ticketPriority)
+    public function show($uuid)
     {
         abort_if(Gate::denies('ticket_priority_show'), Response::HTTP_FORBIDDEN, '403 Forbidden');
-
+        $ticketPriority = TicketPriority::where('uuid', $uuid)->first();
         return view('admin.ticketPriorities.show', compact('ticketPriority'));
     }
 

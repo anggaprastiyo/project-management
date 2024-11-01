@@ -1,10 +1,10 @@
 @can($viewGate)
-    <a class="btn btn-xs btn-primary" href="{{ route('admin.' . $crudRoutePart . '.show', $row->id) }}">
+    <a class="btn btn-xs btn-primary" href="{{ route('admin.' . $crudRoutePart . '.show', $row->uuid) }}">
         <i class="fa fa-eye"></i>
     </a>
 @endcan
 @can($editGate)
-    <a class="btn btn-xs btn-info" href="{{ route('admin.' . $crudRoutePart . '.edit', $row->id) }}">
+    <a class="btn btn-xs btn-info" href="{{ route('admin.' . $crudRoutePart . '.edit', $row->uuid) }}">
         <i class="fa fa-edit"></i>
     </a>
 @endcan

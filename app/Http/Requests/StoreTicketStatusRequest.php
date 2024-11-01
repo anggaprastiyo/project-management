@@ -35,6 +35,9 @@ class StoreTicketStatusRequest extends FormRequest
                 'min:-2147483648',
                 'max:2147483647',
             ],
+            'is_default' => [
+                'nullable'
+            ]
         ];
     }
 }

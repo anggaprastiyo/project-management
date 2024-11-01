@@ -53,8 +53,11 @@ class TicketStatusController extends Controller
             $table->editColumn('order', function ($row) {
                 return $row->order ? $row->order : '';
             });
+            $table->editColumn('is_default', function ($row) {
+                return '<input type="checkbox" disabled ' . ($row->is_default ? 'checked' : null) . '>';
+            });
 
-            $table->rawColumns(['actions', 'placeholder']);
+            $table->rawColumns(['actions', 'placeholder', 'is_default']);
 
             return $table->make(true);
         }
@@ -68,9 +71,7 @@ class TicketStatusController extends Controller
     {
         abort_if(Gate::denies('ticket_status_create'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        $projects = Project::pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
-
-        return view('admin.ticketStatuses.create', compact('projects'));
+        return view('admin.ticketStatuses.create');
     }
 
     public function store(StoreTicketStatusRequest $request)
@@ -80,15 +81,14 @@ class TicketStatusController extends Controller
         return redirect()->route('admin.ticket-statuses.index');
     }
 
-    public function edit(TicketStatus $ticketStatus)
+    public function edit($uuid)
     {
         abort_if(Gate::denies('ticket_status_edit'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        $projects = Project::pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
-
+        $ticketStatus = TicketStatus::where('uuid', $uuid)->first();
         $ticketStatus->load('project');
 
-        return view('admin.ticketStatuses.edit', compact('projects', 'ticketStatus'));
+        return view('admin.ticketStatuses.edit', compact( 'ticketStatus'));
     }
 
     public function update(UpdateTicketStatusRequest $request, TicketStatus $ticketStatus)
@@ -98,10 +98,11 @@ class TicketStatusController extends Controller
         return redirect()->route('admin.ticket-statuses.index');
     }
 
-    public function show(TicketStatus $ticketStatus)
+    public function show($uuid)
     {
         abort_if(Gate::denies('ticket_status_show'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
+        $ticketStatus = TicketStatus::where('uuid', $uuid)->first();
         $ticketStatus->load('project');
 
         return view('admin.ticketStatuses.show', compact('ticketStatus'));

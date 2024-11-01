@@ -20,7 +20,7 @@
             </div>
             <div class="form-group">
                 <label class="required" for="color">{{ trans('cruds.ticketPriority.fields.color') }}</label>
-                <input class="form-control {{ $errors->has('color') ? 'is-invalid' : '' }}" type="text" name="color" id="color" value="{{ old('color', $ticketPriority->color) }}" required>
+                <input class="form-control {{ $errors->has('color') ? 'is-invalid' : '' }}" type="color" name="color" id="color" value="{{ old('color', $ticketPriority->color) }}" required>
                 @if($errors->has('color'))
                     <span class="text-danger">{{ $errors->first('color') }}</span>
                 @endif
@@ -28,8 +28,8 @@
             </div>
             <div class="form-group">
                 <div class="form-check {{ $errors->has('is_default') ? 'is-invalid' : '' }}">
-                    <input class="form-check-input" type="checkbox" name="is_default" id="is_default" value="1" {{ $ticketPriority->is_default || old('is_default', 0) === 1 ? 'checked' : '' }} required>
-                    <label class="required form-check-label" for="is_default">{{ trans('cruds.ticketPriority.fields.is_default') }}</label>
+                    <input class="form-check-input" type="checkbox" name="is_default" id="is_default" value="1" {{ $ticketPriority->is_default || old('is_default', 0) === 1 ? 'checked' : '' }}>
+                    <label class="form-check-label" for="is_default">{{ trans('cruds.ticketPriority.fields.is_default') }}</label>
                 </div>
                 @if($errors->has('is_default'))
                     <span class="text-danger">{{ $errors->first('is_default') }}</span>

@@ -28,8 +28,8 @@
             </div>
             <div class="form-group">
                 <div class="form-check {{ $errors->has('is_default') ? 'is-invalid' : '' }}">
-                    <input class="form-check-input" type="checkbox" name="is_default" id="is_default" value="1" {{ $projectStatus->is_default || old('is_default', 0) === 1 ? 'checked' : '' }} required>
-                    <label class="required form-check-label" for="is_default">{{ trans('cruds.projectStatus.fields.is_default') }}</label>
+                    <input class="form-check-input" type="checkbox" name="is_default" id="is_default" value="1" {{ $projectStatus->is_default || old('is_default', 0) === 1 ? 'checked' : '' }}>
+                    <label class="form-check-label" for="is_default">{{ trans('cruds.projectStatus.fields.is_default') }}</label>
                 </div>
                 @if($errors->has('is_default'))
                     <span class="text-danger">{{ $errors->first('is_default') }}</span>
