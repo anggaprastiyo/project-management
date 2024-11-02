@@ -78,12 +78,6 @@
     <script>
         let table
 
-        $.ajaxSetup({
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            }
-        });
-
         function syncUser() {
 
             Swal.fire({
@@ -109,6 +103,7 @@
                 allowOutsideClick: false
             });
             $.ajax({
+                headers: {'x-csrf-token': _token},
                 method: 'POST',
                 url: '{{ route('admin.users.sync') }}',
                 data: {
