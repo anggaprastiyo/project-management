@@ -172,14 +172,6 @@
                     }
                 },
                 {
-                    extend: 'copy',
-                    className: 'btn-default',
-                    text: copyButtonTrans,
-                    exportOptions: {
-                        columns: ':visible'
-                    }
-                },
-                {
                     extend: 'csv',
                     className: 'btn-default',
                     text: csvButtonTrans,
@@ -199,14 +191,6 @@
                     extend: 'pdf',
                     className: 'btn-default',
                     text: pdfButtonTrans,
-                    exportOptions: {
-                        columns: ':visible'
-                    }
-                },
-                {
-                    extend: 'print',
-                    className: 'btn-default',
-                    text: printButtonTrans,
                     exportOptions: {
                         columns: ':visible'
                     }
