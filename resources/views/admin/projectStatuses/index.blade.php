@@ -43,6 +43,8 @@
 @section('scripts')
     @parent
     <script>
+        let table
+
         $(function () {
             let dtButtons = $.extend(true, [], $.fn.dataTable.defaults.buttons)
             @can('project_status_delete')
@@ -62,17 +64,27 @@
                         return
                     }
 
-                    if (confirm('{{ trans('global.areYouSure') }}')) {
-                        $.ajax({
-                            headers: {'x-csrf-token': _token},
-                            method: 'POST',
-                            url: config.url,
-                            data: {ids: ids, _method: 'DELETE'}
-                        })
-                            .done(function () {
-                                location.reload()
+                    Swal.fire({
+                        title: 'Are you sure?',
+                        text: "You won't be able to revert this!",
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: 'Yes, delete it!'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            $.ajax({
+                                headers: {'x-csrf-token': _token},
+                                method: 'POST',
+                                url: config.url,
+                                data: {ids: ids, _method: 'DELETE'}
                             })
-                    }
+                            .done(function () {
+                                table.ajax.reload();
+                            })
+                        }
+                    });
                 }
             }
             dtButtons.push(deleteButton)
@@ -93,15 +105,15 @@
                     {data: 'actions', name: '{{ trans('global.actions') }}'}
                 ],
                 orderCellsTop: true,
-                order: [[1, 'asc']],
+                order: [[1, 'desc']],
                 pageLength: 50,
             };
 
             function renderColorCircle(data) {
-                return '<span class="color-circle" style="background-color:' + data + '"></span> '+ data;
+                return '<span class="color-circle" style="background-color:' + data + '"></span> ' + data;
             }
 
-            let table = $('.datatable-ProjectStatus').DataTable(dtOverrideGlobals);
+            table = $('.datatable-ProjectStatus').DataTable(dtOverrideGlobals);
             $('a[data-toggle="tab"]').on('shown.bs.tab click', function (e) {
                 $($.fn.dataTable.tables(true)).DataTable()
                     .columns.adjust();
@@ -122,6 +134,7 @@
                     .search(value, strict)
                     .draw()
             });
+
             table.on('column-visibility.dt', function (e, settings, column, state) {
                 visibleColumnsIndexes = []
                 table.columns(":visible").every(function (colIdx) {

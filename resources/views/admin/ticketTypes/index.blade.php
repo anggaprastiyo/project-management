@@ -46,6 +46,8 @@
 @section('scripts')
     @parent
     <script>
+        let table
+
         $(function () {
             let dtButtons = $.extend(true, [], $.fn.dataTable.defaults.buttons)
             @can('ticket_type_delete')
@@ -65,17 +67,27 @@
                         return
                     }
 
-                    if (confirm('{{ trans('global.areYouSure') }}')) {
-                        $.ajax({
-                            headers: {'x-csrf-token': _token},
-                            method: 'POST',
-                            url: config.url,
-                            data: {ids: ids, _method: 'DELETE'}
-                        })
-                            .done(function () {
-                                location.reload()
+                    Swal.fire({
+                        title: 'Are you sure?',
+                        text: "You won't be able to revert this!",
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: 'Yes, delete it!'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            $.ajax({
+                                headers: {'x-csrf-token': _token},
+                                method: 'POST',
+                                url: config.url,
+                                data: {ids: ids, _method: 'DELETE'}
                             })
-                    }
+                            .done(function () {
+                                table.ajax.reload();
+                            })
+                        }
+                    });
                 }
             }
             dtButtons.push(deleteButton)
@@ -109,7 +121,7 @@
                 return '<i class="fa fa-' + data + '"></i> '
             }
 
-            let table = $('.datatable-TicketType').DataTable(dtOverrideGlobals);
+            table = $('.datatable-TicketType').DataTable(dtOverrideGlobals);
             $('a[data-toggle="tab"]').on('shown.bs.tab click', function (e) {
                 $($.fn.dataTable.tables(true)).DataTable()
                     .columns.adjust();
