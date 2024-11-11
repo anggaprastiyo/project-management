@@ -33,22 +33,22 @@
     <ul class="nav nav-tabs" role="tablist" id="relationship-tabs">
         <li class="nav-item">
             <a class="nav-link {{ $activeTab == 'project_tickets' ? 'active show' : '' }}" href="#project_tickets" role="tab" data-toggle="tab">
-                {{ trans('cruds.ticket.title') }}
+               <i class="fa fa-tasks"></i> {{ trans('cruds.ticket.title') }}
             </a>
         </li>
         <li class="nav-item">
             <a class="nav-link {{ $activeTab == 'project_ticket_statuses' ? 'active show' : '' }}" href="#project_ticket_statuses" role="tab" data-toggle="tab">
-                {{ trans('cruds.ticketStatus.title') }}
+                <i class="fa fa-check"></i> {{ trans('cruds.ticketStatus.title') }}
             </a>
         </li>
         <li class="nav-item">
             <a class="nav-link {{ $activeTab == 'members' ? 'active show' : '' }}" href="#members" role="tab" data-toggle="tab">
-                {{ trans('cruds.project.fields.member') }}
+               <i class="fa fa-users"></i> {{ trans('cruds.project.fields.member') }}
             </a>
         </li>
         <li class="nav-item">
             <a class="nav-link {{ $activeTab == 'project_meeting_notes' ? 'active show' : '' }}" href="#project_meeting_notes" role="tab" data-toggle="tab">
-                {{ trans('cruds.meetingNote.title') }}
+               <i class="fa fa-sticky-note"></i> {{ trans('cruds.meetingNote.title') }}
             </a>
         </li>
     </ul>

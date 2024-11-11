@@ -2,8 +2,8 @@
     @can('ticket_create')
         <div style="margin-bottom: 10px;" class="row">
             <div class="col-lg-12">
-                <a class="btn btn-success" href="{{ route('admin.tickets.create', ['project_id' => $project->uuid]) }}">
-                    {{ trans('global.add') }} {{ trans('cruds.ticket.title_singular') }}
+                <a class="btn btn-info" href="{{ route('admin.tickets.create', ['project_id' => $project->uuid]) }}">
+                    <i class="fa fa-plus"></i> {{ trans('global.add') }} {{ trans('cruds.ticket.title_singular') }}
                 </a>
             </div>
         </div>
@@ -59,26 +59,29 @@
                                 {{ $ticket->assigne->name ?? '' }}
                             </td>
                             <td>
+                                <span class="color-circle" style="background-color:{{  $ticket->status->color }}"></span>
                                 {{ $ticket->status->name ?? '' }}
                             </td>
                             <td>
+                                <span class="color-circle" style="background-color:{{  $ticket->type->color }}"></span>
                                 {{ $ticket->type->name ?? '' }}
                             </td>
                             <td>
+                                <span class="color-circle" style="background-color:{{  $ticket->priority->color }}"></span>
                                 {{ $ticket->priority->name ?? '' }}
                             </td>
                             <td>
                                 @can('ticket_show')
                                     <a class="btn btn-xs btn-primary"
                                        href="{{ route('admin.tickets.show', $ticket->uuid) }}">
-                                        {{ trans('global.view') }}
+                                        <i class="fa fa-eye"></i>
                                     </a>
                                 @endcan
 
                                 @can('ticket_edit')
                                     <a class="btn btn-xs btn-info"
                                        href="{{ route('admin.tickets.edit', $ticket->uuid) }}">
-                                        {{ trans('global.edit') }}
+                                        <i class="fa fa-edit"></i>
                                     </a>
                                 @endcan
 
@@ -88,8 +91,7 @@
                                           style="display: inline-block;">
                                         <input type="hidden" name="_method" value="DELETE">
                                         <input type="hidden" name="_token" value="{{ csrf_token() }}">
-                                        <input type="submit" class="btn btn-xs btn-danger"
-                                               value="{{ trans('global.delete') }}">
+                                        <button type="button" class="btn btn-xs btn-danger" onclick="confirmDelete('{{ $ticket->id }}')"><i class="fa fa-trash"></i></button>
                                     </form>
                                 @endcan
 
@@ -154,5 +156,24 @@
 
         })
 
+    </script>
+
+    <script>
+        function confirmDelete(id) {
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "You won't be able to revert this!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, delete it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // Submit the form
+                    $('#delete-form-' + id).submit();
+                }
+            });
+        }
     </script>
 @endsection
