@@ -9,18 +9,7 @@
     <div class="card-body">
         <form method="POST" action="{{ route("admin.meeting-notes.store") }}" enctype="multipart/form-data">
             @csrf
-            <div class="form-group">
-                <label class="required" for="project_id">{{ trans('cruds.meetingNote.fields.project') }}</label>
-                <select class="form-control select2 {{ $errors->has('project') ? 'is-invalid' : '' }}" name="project_id" id="project_id" required>
-                    @foreach($projects as $id => $entry)
-                        <option value="{{ $id }}" {{ old('project_id') == $id ? 'selected' : '' }}>{{ $entry }}</option>
-                    @endforeach
-                </select>
-                @if($errors->has('project'))
-                    <span class="text-danger">{{ $errors->first('project') }}</span>
-                @endif
-                <span class="help-block">{{ trans('cruds.meetingNote.fields.project_helper') }}</span>
-            </div>
+            <input type="hidden" name="project_id" value="{{ !is_null($project->id) ? $project->id : null }}">
             <div class="form-group">
                 <label class="required" for="meeting_date">{{ trans('cruds.meetingNote.fields.meeting_date') }}</label>
                 <input class="form-control date {{ $errors->has('meeting_date') ? 'is-invalid' : '' }}" type="text" name="meeting_date" id="meeting_date" value="{{ old('meeting_date') }}" required>

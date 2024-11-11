@@ -74,10 +74,6 @@ table.dataTable thead .sorting_desc {
     cursor: pointer;
     background: #eaeaea;
 }
-.select2-results__option {
-    padding-left: 0px;
-    padding-right: 0px;
-}
 
 .form-group .required::after {
     content: " *";
@@ -163,4 +159,9 @@ div.dt-button-collection {
 .alert-info, .bg-info, .label-info {
     padding: 5px;
     border-radius: 3px;
+}
+
+.brand-link {
+    padding-bottom: 6px;
+    padding-top: 0px;
 }

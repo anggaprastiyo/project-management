@@ -84,7 +84,7 @@
                             {{ trans('cruds.ticket.fields.type') }}
                         </th>
                         <td>
-                            {{ $ticket->type->uuid ?? '' }}
+                            {{ $ticket->type->name ?? '' }}
                         </td>
                     </tr>
                     <tr>

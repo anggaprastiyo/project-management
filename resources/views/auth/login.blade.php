@@ -1,11 +1,9 @@
 @extends('layouts.app')
 @section('content')
 <div class="login-box">
-    <div class="login-logo">
-        <div class="login-logo">
-            <a href="{{ route('admin.home') }}">
-                {{ trans('panel.site_title') }}
-            </a>
+    <div class="login-logo" style="margin-bottom: 0px">
+        <div class="login-logo" style="margin-bottom: 0px">
+            <img href="{{ route('admin.home') }}" src="{{ asset('project.png') }}" width="250px">
         </div>
     </div>
     <div class="card">

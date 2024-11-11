@@ -10,102 +10,126 @@
         <form method="POST" action="{{ route("admin.tickets.update", [$ticket->id]) }}" enctype="multipart/form-data">
             @method('PUT')
             @csrf
-            <div class="form-group">
-                <label class="required" for="project_id">{{ trans('cruds.ticket.fields.project') }}</label>
-                <select class="form-control select2 {{ $errors->has('project') ? 'is-invalid' : '' }}" name="project_id" id="project_id" required>
-                    @foreach($projects as $id => $entry)
-                        <option value="{{ $id }}" {{ (old('project_id') ? old('project_id') : $ticket->project->id ?? '') == $id ? 'selected' : '' }}>{{ $entry }}</option>
-                    @endforeach
-                </select>
-                @if($errors->has('project'))
-                    <span class="text-danger">{{ $errors->first('project') }}</span>
-                @endif
-                <span class="help-block">{{ trans('cruds.ticket.fields.project_helper') }}</span>
+
+            @if (!is_null($project))
+                <input type="hidden" name="project_id" value="{{ !is_null($project->id) ? $project->id : null }}">
+            @else
+                <div class="form-group">
+                    <label class="required" for="project_id">{{ trans('cruds.ticket.fields.project') }}</label>
+                    <select class="form-control select2 {{ $errors->has('project') ? 'is-invalid' : '' }}"
+                            name="project_id" id="project_id" required>
+                        @foreach($projects as $id => $entry)
+                            <option
+                                value="{{ $entry->id }}" {{ (old('project_id') ? old('project_id') : $ticket->project->id ?? '') == $entry->id ? 'selected' : '' }}>{{ $entry->name }}</option>
+                        @endforeach
+                    </select>
+                    @if($errors->has('project'))
+                        <span class="text-danger">{{ $errors->first('project') }}</span>
+                    @endif
+                    <span class="help-block">{{ trans('cruds.ticket.fields.project_helper') }}</span>
+                </div>
+            @endif
+
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label class="required" for="name">{{ trans('cruds.ticket.fields.name') }}</label>
+                        <input class="form-control {{ $errors->has('name') ? 'is-invalid' : '' }}" type="text" name="name" id="name" value="{{ old('name', $ticket->name) }}" required>
+                        @if($errors->has('name'))
+                            <span class="text-danger">{{ $errors->first('name') }}</span>
+                        @endif
+                        <span class="help-block">{{ trans('cruds.ticket.fields.name_helper') }}</span>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="assigne_id">{{ trans('cruds.ticket.fields.assigne') }}</label>
+                        <select class="form-control select2 {{ $errors->has('assigne') ? 'is-invalid' : '' }}"
+                                name="assigne_id" id="assigne_id">
+                            @if (!is_null($project))
+                                @foreach($assignes as $key => $member)
+                                    <optgroup label="{{$member['text']}}">
+                                        @foreach($member['children'] as $data)
+                                            <option
+                                                value="{{ $data['id'] }}" {{ (old('assigne_id') ? old('assigne_id') : $ticket->assigne_id ?? '') == $data['id'] ? 'selected' : '' }}>{{ $data['nik'].' - '.$data['name'].' ('.$data['job_position_text'].')' }}</option>
+                                        @endforeach
+                                    </optgroup>
+                                @endforeach
+                            @endif
+                        </select>
+                        @if($errors->has('assigne'))
+                            <span class="text-danger">{{ $errors->first('assigne') }}</span>
+                        @endif
+                        <span class="help-block">{{ trans('cruds.ticket.fields.assigne_helper') }}</span>
+                    </div>
+                </div>
             </div>
-            <div class="form-group">
-                <label class="required" for="code">{{ trans('cruds.ticket.fields.code') }}</label>
-                <input class="form-control {{ $errors->has('code') ? 'is-invalid' : '' }}" type="text" name="code" id="code" value="{{ old('code', $ticket->code) }}" required>
-                @if($errors->has('code'))
-                    <span class="text-danger">{{ $errors->first('code') }}</span>
-                @endif
-                <span class="help-block">{{ trans('cruds.ticket.fields.code_helper') }}</span>
+
+            <div class="row">
+                <div class="col-md-2">
+                    <div class="form-group">
+                        <label for="status_id">{{ trans('cruds.ticket.fields.status') }}</label>
+                        <select class="form-control select2 {{ $errors->has('status') ? 'is-invalid' : '' }}" name="status_id" id="status_id">
+                            @foreach($statuses as $id => $entry)
+                                <option value="{{ $id }}" {{ (old('status_id') ? old('status_id') : $ticket->status->id ?? '') == $id ? 'selected' : '' }}>{{ $entry }}</option>
+                            @endforeach
+                        </select>
+                        @if($errors->has('status'))
+                            <span class="text-danger">{{ $errors->first('status') }}</span>
+                        @endif
+                        <span class="help-block">{{ trans('cruds.ticket.fields.status_helper') }}</span>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="form-group">
+                        <label for="type_id">{{ trans('cruds.ticket.fields.type') }}</label>
+                        <select class="form-control select2 {{ $errors->has('type') ? 'is-invalid' : '' }}" name="type_id" id="type_id">
+                            @foreach($types as $id => $entry)
+                                <option value="{{ $id }}" {{ (old('type_id') ? old('type_id') : $ticket->type->id ?? '') == $id ? 'selected' : '' }}>{{ $entry }}</option>
+                            @endforeach
+                        </select>
+                        @if($errors->has('type'))
+                            <span class="text-danger">{{ $errors->first('type') }}</span>
+                        @endif
+                        <span class="help-block">{{ trans('cruds.ticket.fields.type_helper') }}</span>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="form-group">
+                        <label for="priority_id">{{ trans('cruds.ticket.fields.priority') }}</label>
+                        <select class="form-control select2 {{ $errors->has('priority') ? 'is-invalid' : '' }}" name="priority_id" id="priority_id">
+                            @foreach($priorities as $id => $entry)
+                                <option value="{{ $id }}" {{ (old('priority_id') ? old('priority_id') : $ticket->priority->id ?? '') == $id ? 'selected' : '' }}>{{ $entry }}</option>
+                            @endforeach
+                        </select>
+                        @if($errors->has('priority'))
+                            <span class="text-danger">{{ $errors->first('priority') }}</span>
+                        @endif
+                        <span class="help-block">{{ trans('cruds.ticket.fields.priority_helper') }}</span>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label for="label">{{ trans('cruds.ticket.fields.label') }}</label>
+                        <input class="form-control {{ $errors->has('label') ? 'is-invalid' : '' }}" type="text" name="label" id="label" value="{{ old('label', $ticket->label) }}">
+                        @if($errors->has('label'))
+                            <span class="text-danger">{{ $errors->first('label') }}</span>
+                        @endif
+                        <span class="help-block">{{ trans('cruds.ticket.fields.label_helper') }}</span>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label for="point">{{ trans('cruds.ticket.fields.point') }}</label>
+                        <input class="form-control {{ $errors->has('point') ? 'is-invalid' : '' }}" type="number" name="point" id="point" value="{{ old('point', $ticket->point) }}" step="1">
+                        @if($errors->has('point'))
+                            <span class="text-danger">{{ $errors->first('point') }}</span>
+                        @endif
+                        <span class="help-block">{{ trans('cruds.ticket.fields.point_helper') }}</span>
+                    </div>
+                </div>
             </div>
-            <div class="form-group">
-                <label class="required" for="name">{{ trans('cruds.ticket.fields.name') }}</label>
-                <input class="form-control {{ $errors->has('name') ? 'is-invalid' : '' }}" type="text" name="name" id="name" value="{{ old('name', $ticket->name) }}" required>
-                @if($errors->has('name'))
-                    <span class="text-danger">{{ $errors->first('name') }}</span>
-                @endif
-                <span class="help-block">{{ trans('cruds.ticket.fields.name_helper') }}</span>
-            </div>
-            <div class="form-group">
-                <label class="required" for="reporter_id">{{ trans('cruds.ticket.fields.reporter') }}</label>
-                <select class="form-control select2 {{ $errors->has('reporter') ? 'is-invalid' : '' }}" name="reporter_id" id="reporter_id" required>
-                    @foreach($reporters as $id => $entry)
-                        <option value="{{ $id }}" {{ (old('reporter_id') ? old('reporter_id') : $ticket->reporter->id ?? '') == $id ? 'selected' : '' }}>{{ $entry }}</option>
-                    @endforeach
-                </select>
-                @if($errors->has('reporter'))
-                    <span class="text-danger">{{ $errors->first('reporter') }}</span>
-                @endif
-                <span class="help-block">{{ trans('cruds.ticket.fields.reporter_helper') }}</span>
-            </div>
-            <div class="form-group">
-                <label for="assigne_id">{{ trans('cruds.ticket.fields.assigne') }}</label>
-                <select class="form-control select2 {{ $errors->has('assigne') ? 'is-invalid' : '' }}" name="assigne_id" id="assigne_id">
-                    @foreach($assignes as $id => $entry)
-                        <option value="{{ $id }}" {{ (old('assigne_id') ? old('assigne_id') : $ticket->assigne->id ?? '') == $id ? 'selected' : '' }}>{{ $entry }}</option>
-                    @endforeach
-                </select>
-                @if($errors->has('assigne'))
-                    <span class="text-danger">{{ $errors->first('assigne') }}</span>
-                @endif
-                <span class="help-block">{{ trans('cruds.ticket.fields.assigne_helper') }}</span>
-            </div>
-            <div class="form-group">
-                <label for="label">{{ trans('cruds.ticket.fields.label') }}</label>
-                <input class="form-control {{ $errors->has('label') ? 'is-invalid' : '' }}" type="text" name="label" id="label" value="{{ old('label', $ticket->label) }}">
-                @if($errors->has('label'))
-                    <span class="text-danger">{{ $errors->first('label') }}</span>
-                @endif
-                <span class="help-block">{{ trans('cruds.ticket.fields.label_helper') }}</span>
-            </div>
-            <div class="form-group">
-                <label for="status_id">{{ trans('cruds.ticket.fields.status') }}</label>
-                <select class="form-control select2 {{ $errors->has('status') ? 'is-invalid' : '' }}" name="status_id" id="status_id">
-                    @foreach($statuses as $id => $entry)
-                        <option value="{{ $id }}" {{ (old('status_id') ? old('status_id') : $ticket->status->id ?? '') == $id ? 'selected' : '' }}>{{ $entry }}</option>
-                    @endforeach
-                </select>
-                @if($errors->has('status'))
-                    <span class="text-danger">{{ $errors->first('status') }}</span>
-                @endif
-                <span class="help-block">{{ trans('cruds.ticket.fields.status_helper') }}</span>
-            </div>
-            <div class="form-group">
-                <label for="type_id">{{ trans('cruds.ticket.fields.type') }}</label>
-                <select class="form-control select2 {{ $errors->has('type') ? 'is-invalid' : '' }}" name="type_id" id="type_id">
-                    @foreach($types as $id => $entry)
-                        <option value="{{ $id }}" {{ (old('type_id') ? old('type_id') : $ticket->type->id ?? '') == $id ? 'selected' : '' }}>{{ $entry }}</option>
-                    @endforeach
-                </select>
-                @if($errors->has('type'))
-                    <span class="text-danger">{{ $errors->first('type') }}</span>
-                @endif
-                <span class="help-block">{{ trans('cruds.ticket.fields.type_helper') }}</span>
-            </div>
-            <div class="form-group">
-                <label for="priority_id">{{ trans('cruds.ticket.fields.priority') }}</label>
-                <select class="form-control select2 {{ $errors->has('priority') ? 'is-invalid' : '' }}" name="priority_id" id="priority_id">
-                    @foreach($priorities as $id => $entry)
-                        <option value="{{ $id }}" {{ (old('priority_id') ? old('priority_id') : $ticket->priority->id ?? '') == $id ? 'selected' : '' }}>{{ $entry }}</option>
-                    @endforeach
-                </select>
-                @if($errors->has('priority'))
-                    <span class="text-danger">{{ $errors->first('priority') }}</span>
-                @endif
-                <span class="help-block">{{ trans('cruds.ticket.fields.priority_helper') }}</span>
-            </div>
+
             <div class="form-group">
                 <label for="content">{{ trans('cruds.ticket.fields.content') }}</label>
                 <textarea class="form-control ckeditor {{ $errors->has('content') ? 'is-invalid' : '' }}" name="content" id="content">{!! old('content', $ticket->content) !!}</textarea>
@@ -114,14 +138,7 @@
                 @endif
                 <span class="help-block">{{ trans('cruds.ticket.fields.content_helper') }}</span>
             </div>
-            <div class="form-group">
-                <label for="point">{{ trans('cruds.ticket.fields.point') }}</label>
-                <input class="form-control {{ $errors->has('point') ? 'is-invalid' : '' }}" type="number" name="point" id="point" value="{{ old('point', $ticket->point) }}" step="1">
-                @if($errors->has('point'))
-                    <span class="text-danger">{{ $errors->first('point') }}</span>
-                @endif
-                <span class="help-block">{{ trans('cruds.ticket.fields.point_helper') }}</span>
-            </div>
+
             <div class="form-group">
                 <label for="attachment">{{ trans('cruds.ticket.fields.attachment') }}</label>
                 <div class="needsclick dropzone {{ $errors->has('attachment') ? 'is-invalid' : '' }}" id="attachment-dropzone">
@@ -131,26 +148,7 @@
                 @endif
                 <span class="help-block">{{ trans('cruds.ticket.fields.attachment_helper') }}</span>
             </div>
-            <div class="form-group">
-                <label for="design_link">{{ trans('cruds.ticket.fields.design_link') }}</label>
-                <input class="form-control {{ $errors->has('design_link') ? 'is-invalid' : '' }}" type="text" name="design_link" id="design_link" value="{{ old('design_link', $ticket->design_link) }}">
-                @if($errors->has('design_link'))
-                    <span class="text-danger">{{ $errors->first('design_link') }}</span>
-                @endif
-                <span class="help-block">{{ trans('cruds.ticket.fields.design_link_helper') }}</span>
-            </div>
-            <div class="form-group">
-                <label for="related_ticket_id">{{ trans('cruds.ticket.fields.related_ticket') }}</label>
-                <select class="form-control select2 {{ $errors->has('related_ticket') ? 'is-invalid' : '' }}" name="related_ticket_id" id="related_ticket_id">
-                    @foreach($related_tickets as $id => $entry)
-                        <option value="{{ $id }}" {{ (old('related_ticket_id') ? old('related_ticket_id') : $ticket->related_ticket->id ?? '') == $id ? 'selected' : '' }}>{{ $entry }}</option>
-                    @endforeach
-                </select>
-                @if($errors->has('related_ticket'))
-                    <span class="text-danger">{{ $errors->first('related_ticket') }}</span>
-                @endif
-                <span class="help-block">{{ trans('cruds.ticket.fields.related_ticket_helper') }}</span>
-            </div>
+
             <div class="form-group">
                 <button class="btn btn-danger" type="submit">
                     {{ trans('global.save') }}
@@ -159,8 +157,6 @@
         </form>
     </div>
 </div>
-
-
 
 @endsection
 

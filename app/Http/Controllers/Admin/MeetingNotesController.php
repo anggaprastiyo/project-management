@@ -76,15 +76,13 @@ class MeetingNotesController extends Controller
         return view('admin.meetingNotes.index', compact('projects', 'users'));
     }
 
-    public function create()
+    public function create(Request $request)
     {
         abort_if(Gate::denies('meeting_note_create'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        $projects = Project::pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
-
         $participants = User::pluck('name', 'id');
 
-        return view('admin.meetingNotes.create', compact('participants', 'projects'));
+        return view('admin.meetingNotes.create', compact('participants'));
     }
 
     public function store(StoreMeetingNoteRequest $request)

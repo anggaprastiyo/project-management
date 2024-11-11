@@ -20,7 +20,10 @@ class TicketStatusController extends Controller
         abort_if(Gate::denies('ticket_status_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
         if ($request->ajax()) {
-            $query = TicketStatus::with(['project'])->select(sprintf('%s.*', (new TicketStatus)->table));
+            $query = TicketStatus::with(['project'])
+                ->whereNull('project_id')
+                ->select(sprintf('%s.*', (new TicketStatus)->table));
+
             $table = Datatables::of($query);
 
             $table->addColumn('placeholder', '&nbsp;');
@@ -67,16 +70,24 @@ class TicketStatusController extends Controller
         return view('admin.ticketStatuses.index', compact('projects'));
     }
 
-    public function create()
+    public function create(Request $request)
     {
         abort_if(Gate::denies('ticket_status_create'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+        $project = Project::where('uuid', $request->input('project_id'))->first();
 
-        return view('admin.ticketStatuses.create');
+        return view('admin.ticketStatuses.create', compact('project'));
     }
 
     public function store(StoreTicketStatusRequest $request)
     {
         $ticketStatus = TicketStatus::create($request->all());
+
+        if (!is_null($ticketStatus->project_id)) {
+            return redirect()->route('admin.projects.show', [
+                'project' => $ticketStatus->project->uuid,
+                'active_tab' => 'project_ticket_statuses'
+            ]);
+        }
 
         return redirect()->route('admin.ticket-statuses.index');
     }
@@ -94,6 +105,13 @@ class TicketStatusController extends Controller
     public function update(UpdateTicketStatusRequest $request, TicketStatus $ticketStatus)
     {
         $ticketStatus->update($request->all());
+
+        if (!is_null($ticketStatus->project_id)) {
+            return redirect()->route('admin.projects.show', [
+                'project' => $ticketStatus->project->uuid,
+                'active_tab' => 'project_ticket_statuses'
+            ]);
+        }
 
         return redirect()->route('admin.ticket-statuses.index');
     }
@@ -113,6 +131,13 @@ class TicketStatusController extends Controller
         abort_if(Gate::denies('ticket_status_delete'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
         $ticketStatus->delete();
+
+        if (!is_null($ticketStatus->project_id)) {
+            return redirect()->route('admin.projects.show', [
+                'project' => $ticketStatus->project->uuid,
+                'active_tab' => 'project_ticket_statuses'
+            ]);
+        }
 
         return back();
     }

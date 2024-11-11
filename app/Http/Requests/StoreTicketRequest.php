@@ -25,7 +25,7 @@ class StoreTicketRequest extends FormRequest
                 'string',
                 'min:1',
                 'max:10',
-                'required',
+                'nullable',
             ],
             'name' => [
                 'string',
@@ -34,7 +34,7 @@ class StoreTicketRequest extends FormRequest
                 'required',
             ],
             'reporter_id' => [
-                'required',
+                'nullable',
                 'integer',
             ],
             'label' => [

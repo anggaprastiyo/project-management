@@ -34,6 +34,7 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::delete('projects/destroy', 'ProjectController@massDestroy')->name('projects.massDestroy');
     Route::post('projects/media', 'ProjectController@storeMedia')->name('projects.storeMedia');
     Route::post('projects/ckmedia', 'ProjectController@storeCKEditorImages')->name('projects.storeCKEditorImages');
+    Route::post('projects/member/list', 'ProjectController@getMember')->name('get-member');
     Route::resource('projects', 'ProjectController');
 
     // Ticket Type

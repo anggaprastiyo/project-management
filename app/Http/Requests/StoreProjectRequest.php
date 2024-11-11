@@ -29,6 +29,7 @@ class StoreProjectRequest extends FormRequest
                 'min:1',
                 'max:5',
                 'required',
+                'unique:projects'
             ],
             'project_owner_id' => [
                 'required',

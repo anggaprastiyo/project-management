@@ -9,6 +9,7 @@
     <div class="card-body">
         <form method="POST" action="{{ route("admin.ticket-statuses.store") }}" enctype="multipart/form-data">
             @csrf
+            <input type="hidden" name="project_id" value="{{ !is_null($project->id) ? $project->id : null }}">
             <div class="form-group">
                 <label class="required" for="name">{{ trans('cruds.ticketStatus.fields.name') }}</label>
                 <input class="form-control {{ $errors->has('name') ? 'is-invalid' : '' }}" type="text" name="name" id="name" value="{{ old('name', '') }}" required>

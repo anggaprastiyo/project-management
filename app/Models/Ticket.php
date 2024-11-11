@@ -7,6 +7,7 @@ use DateTimeInterface;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Ramsey\Uuid\Uuid;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
@@ -51,6 +52,15 @@ class Ticket extends Model implements HasMedia
         'updated_at',
         'deleted_at',
     ];
+
+    protected static function boot()
+    {
+        parent::boot();
+        static::creating(function ($ticket) {
+            $ticket->uuid = Uuid::uuid4()->toString();
+            $ticket->code = $ticket->generateCode();
+        });
+    }
 
     protected function serializeDate(DateTimeInterface $date)
     {
@@ -106,5 +116,13 @@ class Ticket extends Model implements HasMedia
     public function related_ticket()
     {
         return $this->belongsTo(self::class, 'related_ticket_id');
+    }
+
+    public function generateCode()
+    {
+        $prefix = $this->project->ticket_prefix;
+        $count = Ticket::where('project_id', $this->project_id)->count();
+        $code = $prefix . str_pad($count + 1, 4, '0', STR_PAD_LEFT);
+        return $code;
     }
 }

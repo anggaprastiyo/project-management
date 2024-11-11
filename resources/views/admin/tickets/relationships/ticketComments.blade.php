@@ -97,7 +97,7 @@
   let deleteButton = {
     text: deleteButtonTrans,
     url: "{{ route('admin.comments.massDestroy') }}",
-    className: 'btn-danger',
+    className: 'btn-danger btn-xs',
     action: function (e, dt, node, config) {
       var ids = $.map(dt.rows({ selected: true }).nodes(), function (entry) {
           return $(entry).data('entry-id')

@@ -28,6 +28,9 @@
 
 <body class="sidebar-mini layout-fixed" style="height: auto;">
 <div class="wrapper">
+
+    @include('sweetalert::alert')
+
     <nav class="main-header navbar navbar-expand bg-white navbar-light border-bottom">
         <!-- Left navbar links -->
         <ul class="navbar-nav">
@@ -110,7 +113,7 @@
 <script src="https://cdn.ckeditor.com/ckeditor5/16.0.0/classic/ckeditor.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/js/bootstrap-datetimepicker.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.5.1/min/dropzone.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+{{--<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>--}}
 <script src="{{ asset('js/main.js') }}"></script>
 <script>
     $(function () {
@@ -152,7 +155,7 @@
             buttons: [
                 {
                     extend: 'selectAll',
-                    className: 'btn-primary',
+                    className: 'btn-primary btn-xs',
                     text: selectAllButtonTrans,
                     exportOptions: {
                         columns: ':visible'
@@ -165,7 +168,7 @@
                 },
                 {
                     extend: 'selectNone',
-                    className: 'btn-primary',
+                    className: 'btn-primary btn-xs',
                     text: selectNoneButtonTrans,
                     exportOptions: {
                         columns: ':visible'
@@ -173,7 +176,7 @@
                 },
                 {
                     extend: 'csv',
-                    className: 'btn-default',
+                    className: 'btn-default btn-xs',
                     text: csvButtonTrans,
                     exportOptions: {
                         columns: ':visible'
@@ -181,7 +184,7 @@
                 },
                 {
                     extend: 'excel',
-                    className: 'btn-default',
+                    className: 'btn-default btn-xs',
                     text: excelButtonTrans,
                     exportOptions: {
                         columns: ':visible'
@@ -189,7 +192,7 @@
                 },
                 {
                     extend: 'pdf',
-                    className: 'btn-default',
+                    className: 'btn-default btn-xs',
                     text: pdfButtonTrans,
                     exportOptions: {
                         columns: ':visible'
@@ -197,7 +200,7 @@
                 },
                 {
                     extend: 'colvis',
-                    className: 'btn-default',
+                    className: 'btn-default btn-xs',
                     text: colvisButtonTrans,
                     exportOptions: {
                         columns: ':visible'

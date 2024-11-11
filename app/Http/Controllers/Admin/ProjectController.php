@@ -9,9 +9,13 @@ use App\Http\Requests\StoreProjectRequest;
 use App\Http\Requests\UpdateProjectRequest;
 use App\Models\Project;
 use App\Models\ProjectStatus;
+use App\Models\TicketStatus;
 use App\Models\User;
+use App\Services\UserServices;
+use Carbon\Carbon;
 use Gate;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 use Symfony\Component\HttpFoundation\Response;
 use Yajra\DataTables\Facades\DataTables;
@@ -24,8 +28,11 @@ class ProjectController extends Controller
     {
         abort_if(Gate::denies('project_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        if ($request->ajax()) {
-            $query = Project::with(['project_owner', 'project_status', 'members'])->select(sprintf('%s.*', (new Project)->table));
+        if ($request->ajax()) {  
+            $query = Project::with(['project_owner', 'project_status', 'members'])
+                ->select(sprintf('%s.*', (new Project)->table))
+                ->orderBy('id', 'desc');
+
             $table = Datatables::of($query);
 
             $table->addColumn('placeholder', '&nbsp;');
@@ -86,23 +93,23 @@ class ProjectController extends Controller
             return $table->make(true);
         }
 
-        $users            = User::get();
         $project_statuses = ProjectStatus::get();
 
-        return view('admin.projects.index', compact('users', 'project_statuses'));
+        return view('admin.projects.index', compact( 'project_statuses'));
     }
 
     public function create()
     {
         abort_if(Gate::denies('project_create'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        $project_owners = User::pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
+        $user = Auth::user();
+        $project_owners = User::where('id', $user->id)
+            ->pluck('name', 'id')
+            ->prepend(trans('global.pleaseSelect'), '');
 
         $project_statuses = ProjectStatus::pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
 
-        $members = User::pluck('name', 'id');
-
-        return view('admin.projects.create', compact('members', 'project_owners', 'project_statuses'));
+        return view('admin.projects.create', compact('project_owners', 'project_statuses'));
     }
 
     public function store(StoreProjectRequest $request)
@@ -117,22 +124,36 @@ class ProjectController extends Controller
             Media::whereIn('id', $media)->update(['model_id' => $project->id]);
         }
 
+        // create ticket status on project by status type
+        $statusType = $request->input('status_type');
+        if ($statusType == 'default') {
+            $defaultTickets = TicketStatus::whereNull('project_id')
+                ->whereNull('deleted_at')
+                ->select(['name', 'color', 'order', 'is_default'])
+                ->get();
+
+            foreach ($defaultTickets as $defaultTickets) {
+                $defaultTickets->project_id = $project->id;
+                $defaultTickets->created_at = Carbon::now();
+                TicketStatus::create($defaultTickets->toArray());
+            }
+        }
+
         return redirect()->route('admin.projects.index');
     }
 
-    public function edit(Project $project)
+    public function edit($uuid)
     {
         abort_if(Gate::denies('project_edit'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        $project_owners = User::pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
-
         $project_statuses = ProjectStatus::pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
-
-        $members = User::pluck('name', 'id');
-
+        $project = Project::where('uuid', $uuid)->first();
+        $members = UserServices::generateProjectMember($project->team, $project->project_owner->unit_code);
         $project->load('project_owner', 'project_status', 'members');
 
-        return view('admin.projects.edit', compact('members', 'project', 'project_owners', 'project_statuses'));
+        $isProjectAlreadyHaveTicket = $project->projectTickets->count() > 0 ? false : true;
+
+        return view('admin.projects.edit', compact('members', 'project', 'project_statuses', 'isProjectAlreadyHaveTicket'));
     }
 
     public function update(UpdateProjectRequest $request, Project $project)
@@ -153,13 +174,15 @@ class ProjectController extends Controller
         return redirect()->route('admin.projects.index');
     }
 
-    public function show(Project $project)
+    public function show(Request $request, $uuid)
     {
         abort_if(Gate::denies('project_show'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
+        $project = Project::where('uuid', $uuid)->first();
         $project->load('project_owner', 'project_status', 'members', 'projectTickets', 'projectTicketStatuses', 'projectMeetingNotes');
+        $activeTab = !is_null($request->query('active_tab')) ? $request->query('active_tab') : 'project_tickets';
 
-        return view('admin.projects.show', compact('project'));
+        return view('admin.projects.show', compact('project', 'activeTab'));
     }
 
     public function destroy(Project $project)
@@ -192,5 +215,23 @@ class ProjectController extends Controller
         $media         = $model->addMediaFromRequest('upload')->toMediaCollection('ck-media');
 
         return response()->json(['id' => $media->id, 'url' => $media->getUrl()], Response::HTTP_CREATED);
+    }
+
+    public function getMember(Request $request)
+    {
+        $this->validate($request, [
+            'type' => 'required',
+            'project_id' => 'nullable|exists:projects,id'
+        ]);
+
+        // type input
+        $type = $request->input('type');
+        $projectId = $request->input('project_id');
+        $user = Auth::user();
+
+        // generate members
+        $members = UserServices::generateProjectMember($type, $user->unit_code, $projectId);
+
+        return response()->json($members, Response::HTTP_OK);
     }
 }

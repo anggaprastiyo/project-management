@@ -2,7 +2,7 @@
     @can('meeting_note_create')
         <div style="margin-bottom: 10px;" class="row">
             <div class="col-lg-12">
-                <a class="btn btn-success" href="{{ route('admin.meeting-notes.create') }}">
+                <a class="btn btn-success" href="{{ route('admin.meeting-notes.create', ['project_id' => $project->uuid]) }}">
                     {{ trans('global.add') }} {{ trans('cruds.meetingNote.title_singular') }}
                 </a>
             </div>
@@ -20,9 +20,6 @@
                         <tr>
                             <th width="10">
 
-                            </th>
-                            <th>
-                                {{ trans('cruds.meetingNote.fields.id') }}
                             </th>
                             <th>
                                 {{ trans('cruds.meetingNote.fields.project') }}
@@ -48,9 +45,6 @@
 
                                 </td>
                                 <td>
-                                    {{ $meetingNote->id ?? '' }}
-                                </td>
-                                <td>
                                     {{ $meetingNote->project->name ?? '' }}
                                 </td>
                                 <td>
@@ -66,19 +60,19 @@
                                 </td>
                                 <td>
                                     @can('meeting_note_show')
-                                        <a class="btn btn-xs btn-primary" href="{{ route('admin.meeting-notes.show', $meetingNote->id) }}">
+                                        <a class="btn btn-xs btn-primary" href="{{ route('admin.meeting-notes.show', $meetingNote->uuid) }}">
                                             {{ trans('global.view') }}
                                         </a>
                                     @endcan
 
                                     @can('meeting_note_edit')
-                                        <a class="btn btn-xs btn-info" href="{{ route('admin.meeting-notes.edit', $meetingNote->id) }}">
+                                        <a class="btn btn-xs btn-info" href="{{ route('admin.meeting-notes.edit', $meetingNote->uuid) }}">
                                             {{ trans('global.edit') }}
                                         </a>
                                     @endcan
 
                                     @can('meeting_note_delete')
-                                        <form action="{{ route('admin.meeting-notes.destroy', $meetingNote->id) }}" method="POST" onsubmit="return confirm('{{ trans('global.areYouSure') }}');" style="display: inline-block;">
+                                        <form action="{{ route('admin.meeting-notes.destroy', $meetingNote->uuid) }}" method="POST" onsubmit="return confirm('{{ trans('global.areYouSure') }}');" style="display: inline-block;">
                                             <input type="hidden" name="_method" value="DELETE">
                                             <input type="hidden" name="_token" value="{{ csrf_token() }}">
                                             <input type="submit" class="btn btn-xs btn-danger" value="{{ trans('global.delete') }}">
@@ -105,7 +99,7 @@
   let deleteButton = {
     text: deleteButtonTrans,
     url: "{{ route('admin.meeting-notes.massDestroy') }}",
-    className: 'btn-danger',
+    className: 'btn-danger btn-xs',
     action: function (e, dt, node, config) {
       var ids = $.map(dt.rows({ selected: true }).nodes(), function (entry) {
           return $(entry).data('entry-id')

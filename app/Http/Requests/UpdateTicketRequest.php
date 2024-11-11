@@ -21,21 +21,11 @@ class UpdateTicketRequest extends FormRequest
                 'required',
                 'integer',
             ],
-            'code' => [
-                'string',
-                'min:1',
-                'max:10',
-                'required',
-            ],
             'name' => [
                 'string',
                 'min:1',
                 'max:100',
                 'required',
-            ],
-            'reporter_id' => [
-                'required',
-                'integer',
             ],
             'label' => [
                 'string',
